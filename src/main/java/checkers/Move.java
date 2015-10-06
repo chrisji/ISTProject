@@ -55,4 +55,36 @@ public class Move {
         }
         return fromCol - 1;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Move move = (Move) o;
+
+        if (fromRow != move.getFromRow() || fromCol != move.getFromCol()) {
+            return false;
+        }
+
+        if (toRow != move.getToRow() || toCol != move.getToCol()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = fromRow;
+        result = 31 * result + fromCol;
+        result = 31 * result + toRow;
+        result = 31 * result + toCol;
+        return result;
+    }
 }

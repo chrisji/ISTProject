@@ -61,21 +61,33 @@ public class Game {
         currentPiece = board[move.getFromRow()][move.getFromCol()].removeContents();
         board[move.getToRow()][move.getToCol()].setContents(currentPiece);
 
-        // Remove taken piece from board
+        if (isCrowningMove(player, move)) {
+            currentPiece.crown();
+        }
+
         if (move.isTake()) {
+            // Remove taken piece from board
             board[move.calcTakenRow()][move.calcTakenCol()].removeContents();
 
-            // Increment turn if play has no more valid moves
-            if (player == player1 && getValidPlayer1Moves().isEmpty()) {
-                incrementTurn();
-            } else if (player == player2 && getValidPlayer2Moves().isEmpty()) {
+            // Increment turn if player has no more valid moves, or if the piece was crowned
+            if (getValidMoves(player).isEmpty() || isCrowningMove(player, move)) {
                 incrementTurn();
             }
         } else {
+            // Move was not a take... end of turn
             incrementTurn();
         }
     }
 
+    public List<Move> getValidMoves(Player player) {
+        if (player == player1) {
+            return getValidPlayer1Moves();
+        } else {
+            return getValidPlayer2Moves();
+        }
+    }
+
+    // TODO: Do some refactoring to merge player1 and player2 checks.
     public List<Move> getValidPlayer1Moves() {
         List<Move> nonCapturingMoves = new ArrayList<Move>();
         List<Move> capturingMoves = new ArrayList<Move>();
@@ -273,23 +285,6 @@ public class Game {
      * Visual Debugging.
      *
      * Prints the board out to the console. E.g.
-     *  --- --- --- --- --- --- --- ---
-     * |   | c |   | c |   | c |   | c |
-     *  --- --- --- --- --- --- --- ---
-     * | c |   | c |   | c |   | c |   |
-     *  --- --- --- --- --- --- --- ---
-     * |   | c |   | c |   | c |   | c |
-     *  --- --- --- --- --- --- --- ---
-     * |   |   |   |   |   |   |   |   |
-     *  --- --- --- --- --- --- --- ---
-     * |   |   |   |   |   |   |   |   |
-     *  --- --- --- --- --- --- --- ---
-     * | a |   | a |   | a |   | a |   |
-     *  --- --- --- --- --- --- --- ---
-     * |   | a |   | a |   | a |   | a |
-     *  --- --- --- --- --- --- --- ---
-     * | a |   | a |   | a |   | a |   |
-     *  --- --- --- --- --- --- --- ---
      */
     public void printBoard() {
         // Top numbers
@@ -322,29 +317,51 @@ public class Game {
             throw new InvalidMoveException("It is not " + player.getName() + "'s turn");
         }
 
-        // Ensure the old cell is not out-of-bounds
-        if (move.getFromRow() < 0 || move.getFromRow() >= ROWS || move.getFromCol() < 0 || move.getFromCol() >= COLS) {
-            throw new InvalidMoveException("Cannot move a piece from outside the board's dimensions");
+        if (player == player1 && !getValidPlayer1Moves().contains(move)) {
+            throw new InvalidMoveException();
         }
 
-        // Ensure the new cell is not out-of-bounds
-        if (move.getToRow() < 0 || move.getToRow() >= ROWS || move.getToCol() < 0 || move.getToCol() >= COLS) {
-            throw new InvalidMoveException("Cannot move a piece to outside the board's dimensions");
+        if (player == player2 && !getValidPlayer2Moves().contains(move)) {
+            throw new InvalidMoveException();
         }
 
-        // Ensure the old cell is not empty
-        if (this.board[move.getFromRow()][move.getFromCol()].isEmpty()) {
-            throw new InvalidMoveException("There is no piece in cell [" + move.getFromRow() + ", " + move.getFromCol() + "]");
+//        // Ensure the old cell is not out-of-bounds
+//        if (move.getFromRow() < 0 || move.getFromRow() >= ROWS || move.getFromCol() < 0 || move.getFromCol() >= COLS) {
+//            throw new InvalidMoveException("Cannot move a piece from outside the board's dimensions");
+//        }
+//
+//        // Ensure the new cell is not out-of-bounds
+//        if (move.getToRow() < 0 || move.getToRow() >= ROWS || move.getToCol() < 0 || move.getToCol() >= COLS) {
+//            throw new InvalidMoveException("Cannot move a piece to outside the board's dimensions");
+//        }
+//
+//        // Ensure the old cell is not empty
+//        if (this.board[move.getFromRow()][move.getFromCol()].isEmpty()) {
+//            throw new InvalidMoveException("There is no piece in cell [" + move.getFromRow() + ", " + move.getFromCol() + "]");
+//        }
+//
+//        // Ensure the new cell is empty
+//        if (!this.board[move.getToRow()][move.getToCol()].isEmpty()) {
+//            throw new InvalidMoveException("There is already a piece in cell [" + move.getToRow() + ", " + move.getToCol() + "]");
+//        }
+//
+//        // Ensure piece to be moved is owned by the player
+//        if (this.board[move.getFromRow()][move.getFromCol()].getContents().getPlayer() != player) {
+//            throw new InvalidMoveException("The piece attempting to be moved is not owned by the current player");
+//        }
+    }
+
+    private boolean isCrowningMove(Player player, Move move) {
+        // Check if player 1 piece has reached the 'bottom' of the board
+        if (player == player1 && move.getToRow() == 7) {
+            return true;
         }
 
-        // Ensure the new cell is empty
-        if (!this.board[move.getToRow()][move.getToCol()].isEmpty()) {
-            throw new InvalidMoveException("There is already a piece in cell [" + move.getToRow() + ", " + move.getToCol() + "]");
+        // Check if player 2 piece has reached the 'top' of the board
+        if (player == player2 && move.getToRow() == 0) {
+            return true;
         }
 
-        // Ensure piece to be moved is owned by the player
-        if (this.board[move.getFromRow()][move.getFromCol()].getContents().getPlayer() != player) {
-            throw new InvalidMoveException("The piece attempting to be moved is not owned by the current player");
-        }
+        return false;
     }
 }
