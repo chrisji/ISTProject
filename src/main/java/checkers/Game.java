@@ -1,6 +1,7 @@
 package checkers;
 
 import checkers.exceptions.InvalidMoveException;
+import checkers.players.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,12 @@ public class Game {
     private Player currentTurn;
     private Piece currentPiece;
 
-    public Game(Player player1, Player player2) {
+    public Game(Player player1, Player player2, Player startingPlayer) {
         this.player1 = player1;
         this.player2 = player2;
 
         this.board = new Cell[ROWS][COLS];
-        this.currentTurn = player1;
+        this.currentTurn = startingPlayer;
         this.currentPiece = null;
 
         setupBoard();

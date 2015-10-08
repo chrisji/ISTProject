@@ -1,4 +1,4 @@
-package checkers;
+package checkers.players;
 
 /**
  * @author Chris Inskip

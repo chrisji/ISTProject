@@ -1,5 +1,7 @@
 package checkers;
 
+import checkers.players.Player;
+
 /**
  * @author Chris Inskip
  * @version 03/10/2015
