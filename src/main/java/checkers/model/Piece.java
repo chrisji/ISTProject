@@ -1,4 +1,4 @@
-package checkers;
+package checkers.model;
 
 import checkers.players.Player;
 
@@ -6,9 +6,9 @@ import checkers.players.Player;
  * @author Chris Inskip
  * @version 03/10/2015
  */
-public class Piece {
+public class Piece implements Cloneable {
     private boolean crowned;
-    private Player player;
+    private final Player player;
 
     public Piece(Player player) {
         this.crowned = false;
@@ -36,5 +36,16 @@ public class Piece {
         } else {
             return pieceInitial.toLowerCase();
         }
+    }
+
+    @Override
+    protected Piece clone() throws CloneNotSupportedException {
+        Piece p = new Piece(player);
+
+        if (isCrowned()) {
+            p.crown();
+        }
+
+        return p;
     }
 }

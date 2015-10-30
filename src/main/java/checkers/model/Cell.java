@@ -1,10 +1,10 @@
-package checkers;
+package checkers.model;
 
 /**
  * @author Chris Inskip
  * @version 03/10/2015
  */
-public class Cell {
+public class Cell implements Cloneable {
     private Piece piece;
 
     public Cell() {
@@ -31,5 +31,16 @@ public class Cell {
         Piece p = this.piece;
         this.piece = null;
         return p;
+    }
+
+    @Override
+    protected Cell clone() throws CloneNotSupportedException {
+        super.clone();
+
+        if (piece == null) {
+            return new Cell();
+        } else {
+            return new Cell(piece.clone());
+        }
     }
 }

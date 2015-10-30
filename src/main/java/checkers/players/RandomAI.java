@@ -1,7 +1,6 @@
 package checkers.players;
 
-import checkers.Game;
-import checkers.Move;
+import checkers.model.Move;
 
 import java.util.List;
 import java.util.Random;
@@ -19,8 +18,8 @@ public class RandomAI extends AI {
         this.rand = new Random();
     }
 
-    public Move nextMove(Game game) {
-        List<Move> moves = game.getValidMoves(this);
+    public Move nextMove() {
+        List<Move> moves = getGame().getValidMoves(getGame().getGameState());
         return moves.get(rand.nextInt(moves.size()));
     }
 }

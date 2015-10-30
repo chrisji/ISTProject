@@ -1,4 +1,4 @@
-package checkers;
+package checkers.model;
 
 /**
  * Data structure representing a `move` (a transition from one cell on the board to another).

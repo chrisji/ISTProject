@@ -1,4 +1,4 @@
-package checkers;
+package checkers.model;
 
 import checkers.exceptions.InvalidMoveException;
 import checkers.players.Player;
@@ -11,55 +11,52 @@ import java.util.List;
  * @version 03/10/2015
  */
 public class Game {
-    private final Cell[][] board;
+    private State gameState;
     private static final int ROWS = 8;
     private static final int COLS = 8;
 
     private Player player1;
     private Player player2;
-
-    private Player currentTurn;
-    private Piece currentPiece;
+    private Player winner;
 
     public Game(Player player1, Player player2, Player startingPlayer) {
         this.player1 = player1;
         this.player2 = player2;
+        this.winner = null;
 
-        this.board = new Cell[ROWS][COLS];
-        this.currentTurn = startingPlayer;
-        this.currentPiece = null;
-
-        setupBoard();
+        Cell[][] board = Utils.generateInitialBoard(Game.ROWS, Game.COLS, player1, player2);
+        gameState = new State(board, startingPlayer, null);
     }
 
-    private void setupBoard() {
-        // Init board with empty cells
-        for (int i=0; i < Game.ROWS; i++) {
-            for (int j=0; j < Game.COLS; j++) {
-                board[i][j] = new Cell();
-            }
-        }
+    public Player incrementTurn(Player player) {
+        return player == player1 ? player2 : player1;
 
-        // Add pieces to the board
-        setupPlayer1();
-        setupPlayer2();
+        // Check for a winner (current player doesn't have any valid moves left)
+//        if (currentTurn == player1 && getValidPlayer1Moves().isEmpty()) {
+//            winner = player2;
+//        } else if (currentTurn == player2 && getValidPlayer2Moves().isEmpty()) {
+//            winner = player1;
+//        }
     }
 
-    public Player getCurrentTurn() {
-        return currentTurn;
+    public boolean hasWinner() {
+        return getWinner() != null;
     }
 
-    public void incrementTurn() {
-        currentPiece = null;
-        currentTurn = currentTurn == player1 ? player2 : player1;
+    public Player getWinner() {
+        return this.winner;
     }
 
-    public void movePiece(Player player, Move move) throws InvalidMoveException {
+    public State movePiece(State currentState, Move move) throws InvalidMoveException {
+        Player player = currentState.getTurn();
+
+        Cell[][] board = Utils.cloneBoard(currentState.getBoard());
+
         // Ensure the move is valid
-        validateMove(player, move);
+        validateMove(currentState, player, move);
 
         // Move piece, and mark as the current piece being used for this turn
-        currentPiece = board[move.getFromRow()][move.getFromCol()].removeContents();
+        Piece currentPiece = board[move.getFromRow()][move.getFromCol()].removeContents();
         board[move.getToRow()][move.getToCol()].setContents(currentPiece);
 
         if (isCrowningMove(player, move)) {
@@ -71,25 +68,66 @@ public class Game {
             board[move.calcTakenRow()][move.calcTakenCol()].removeContents();
 
             // Increment turn if player has no more valid moves, or if the piece was crowned
-            if (getValidMoves(player).isEmpty() || isCrowningMove(player, move)) {
-                incrementTurn();
+            if (getValidMoves(new State(board, player, currentPiece)).isEmpty() || isCrowningMove(player, move)) {
+                return new State(board, incrementTurn(player), null);
             }
         } else {
             // Move was not a take... end of turn
-            incrementTurn();
+            return new State(board, incrementTurn(player), null);
         }
+
+        return new State(board, player, currentPiece);
     }
 
-    public List<Move> getValidMoves(Player player) {
-        if (player == player1) {
-            return getValidPlayer1Moves();
+    public State doMoveChain(State state, MoveChain moveChain) throws InvalidMoveException {
+        State currentState = state;
+
+        for (Move move : moveChain.getMoves()) {
+            currentState = movePiece(currentState, move);
+        }
+
+        return currentState;
+    }
+
+    public List<MoveChain> getMoveChains(State state, Player player, List<MoveChain> moveChains, MoveChain moveChain) throws InvalidMoveException {
+        if (player != state.getTurn()) {
+            return moveChains;
+        }
+
+        List<Move> moves = getValidMoves(state);
+
+        for (Move move: moves) {
+            State nextState = movePiece(state, move);
+            MoveChain clonedMoveChain = moveChain.clone();
+            clonedMoveChain.addMove(move);
+
+            // Check to see if chain still going.
+            if (nextState.getTurn() != player) {
+                // End of move chaining
+                moveChains.add(clonedMoveChain);
+                System.out.println(clonedMoveChain.getMoves());
+            } else {
+                // Moves still available to chain together
+                getMoveChains(nextState, player, moveChains, clonedMoveChain);
+            }
+        }
+
+        return moveChains;
+    }
+
+    public List<Move> getValidMoves(State state) {
+        if (state.getTurn() == player1) {
+            return getValidPlayer1Moves(state);
         } else {
-            return getValidPlayer2Moves();
+            return getValidPlayer2Moves(state);
         }
     }
 
     // TODO: Do some refactoring to merge player1 and player2 checks.
-    public List<Move> getValidPlayer1Moves() {
+    public List<Move> getValidPlayer1Moves(State state) {
+        Cell[][] board = state.getBoard();
+        Piece currentPiece = state.getCurrentPiece();
+
         List<Move> nonCapturingMoves = new ArrayList<Move>();
         List<Move> capturingMoves = new ArrayList<Move>();
 
@@ -169,7 +207,10 @@ public class Game {
         return nonCapturingMoves;
     }
 
-    public List<Move> getValidPlayer2Moves() {
+    public List<Move> getValidPlayer2Moves(State state) {
+        Cell[][] board = state.getBoard();
+        Piece currentPiece = state.getCurrentPiece();
+
         List<Move> nonCapturingMoves = new ArrayList<Move>();
         List<Move> capturingMoves = new ArrayList<Move>();
 
@@ -250,79 +291,19 @@ public class Game {
         return nonCapturingMoves;
     }
 
-    // TODO: refactor this shit!
-    private void setupPlayer1() {
-        this.board[0][1].setContents(new Piece(player1));
-        this.board[0][3].setContents(new Piece(player1));
-        this.board[0][5].setContents(new Piece(player1));
-        this.board[0][7].setContents(new Piece(player1));
-        this.board[1][0].setContents(new Piece(player1));
-        this.board[1][2].setContents(new Piece(player1));
-        this.board[1][4].setContents(new Piece(player1));
-        this.board[1][6].setContents(new Piece(player1));
-        this.board[2][1].setContents(new Piece(player1));
-        this.board[2][3].setContents(new Piece(player1));
-        this.board[2][5].setContents(new Piece(player1));
-        this.board[2][7].setContents(new Piece(player1));
-    }
+    private void validateMove(State state, Player player, Move move) throws InvalidMoveException {
+        Player currentTurn = state.getTurn();
 
-    // TODO: refactor this shit!
-    private void setupPlayer2() {
-        this.board[5][0].setContents(new Piece(player2));
-        this.board[5][2].setContents(new Piece(player2));
-        this.board[5][4].setContents(new Piece(player2));
-        this.board[5][6].setContents(new Piece(player2));
-        this.board[6][1].setContents(new Piece(player2));
-        this.board[6][3].setContents(new Piece(player2));
-        this.board[6][5].setContents(new Piece(player2));
-        this.board[6][7].setContents(new Piece(player2));
-        this.board[7][0].setContents(new Piece(player2));
-        this.board[7][2].setContents(new Piece(player2));
-        this.board[7][4].setContents(new Piece(player2));
-        this.board[7][6].setContents(new Piece(player2));
-    }
-
-    /**
-     * Visual Debugging.
-     *
-     * Prints the board out to the console. E.g.
-     */
-    public void printBoard() {
-        // Top numbers
-        System.out.print("  ");
-        for (int i=0; i < COLS; i++) {
-            System.out.print("  " + i + " ");
-        }
-        System.out.println();
-
-
-        for (int i=0; i < ROWS; i++) {
-            System.out.println("   --- --- --- --- --- --- --- ---  ");
-            System.out.print(i + " | "); // Left side numbers
-
-            for (int j=0; j < COLS; j++) {
-                if (board[i][j].getContents() != null) {
-                    System.out.print(board[i][j].getContents() + " | ");
-                } else {
-                    System.out.print(" " + " | ");
-                }
-            }
-            System.out.println();
-        }
-        System.out.println("   --- --- --- --- --- --- --- ---  ");
-    }
-
-    private void validateMove(Player player, Move move) throws InvalidMoveException {
         // Ensure it's the players turn to make a move
         if (currentTurn != player) {
             throw new InvalidMoveException("It is not " + player.getName() + "'s turn");
         }
 
-        if (player == player1 && !getValidPlayer1Moves().contains(move)) {
+        if (player == player1 && !getValidPlayer1Moves(state).contains(move)) {
             throw new InvalidMoveException();
         }
 
-        if (player == player2 && !getValidPlayer2Moves().contains(move)) {
+        if (player == player2 && !getValidPlayer2Moves(state).contains(move)) {
             throw new InvalidMoveException();
         }
 
@@ -364,5 +345,21 @@ public class Game {
         }
 
         return false;
+    }
+
+    public State getGameState() {
+        return this.gameState;
+    }
+
+    public void setGameState(State state) {
+        this.gameState = state;
+    }
+
+    public Player getPlayer1() {
+        return this.player1;
+    }
+
+    public Player getPlayer2() {
+        return this.player2;
     }
 }
