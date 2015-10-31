@@ -15,12 +15,45 @@ import java.util.List;
  */
 public class AI extends Player {
 
-    public AI(String name) {
+    private Move bestNextMove;
+    private int depth;
+
+    public AI(String name, int depth) {
         super(name);
+        this.depth = depth;
     }
 
-    public Move nextMove() {
-        return getGame().getValidMoves(getGame().getGameState()).get(0);
+    public MoveChain nextMoveChain() throws InvalidMoveException {
+        List<MoveChain> possibleMoveChains = getGame().getMoveChains(getGame().getGameState(), this);
+
+        if (!possibleMoveChains.isEmpty()) {
+            // Initialise best move chain and best value.
+            MoveChain bestChain = possibleMoveChains.remove(0);
+
+            int bestValue = minimax(getGame().doMoveChain(getGame().getGameState(), bestChain), depth - 1, getGame().incrementTurn(this));
+            System.out.println("Move Chain:" + bestChain.getMoves().toString() + " minimax score: " + bestValue);
+
+            // Iterate through other possible moves and find best move.
+            for (MoveChain moveChain: possibleMoveChains) {
+                State resultState = getGame().doMoveChain(getGame().getGameState(), moveChain);
+
+                int prevBest = bestValue;
+                int score = minimax(resultState, depth-1, getGame().incrementTurn(this));
+
+                // Update best value
+                bestValue = getBestValue(bestValue, score);
+                System.out.println("Move Chain:" + moveChain.getMoves().toString() + " minimax score: " + score);
+
+                // If previous value is now not the best, update best moveChain
+                if (prevBest != bestValue) {
+                    bestChain = moveChain;
+                }
+            }
+
+            return bestChain;
+        }
+
+        return null;
     }
 
     /**
@@ -42,8 +75,7 @@ public class AI extends Player {
                 bestValue = min(bestValue, eval)
             return bestValue
      */
-
-    private int minimax(State state, int depth, Player player) {
+    public int minimax(State state, int depth, Player player) {
         if (depth == 0 || getGame().getValidMoves(state).isEmpty()) {
             return evaluateState(state);
         }
@@ -52,14 +84,12 @@ public class AI extends Player {
             // MAX player's turn
             int bestValue = Integer.MIN_VALUE;
 
-            List<MoveChain> moveChains = new ArrayList<MoveChain>();
             try {
-                moveChains = getGame().getMoveChains(state, player, moveChains, new MoveChain());
-
                 // Recursively find the best value
-                for (MoveChain moveChain : moveChains) {
+                for (MoveChain moveChain : getGame().getMoveChains(state, player)) {
                     int eval = minimax(getGame().doMoveChain(state, moveChain), depth - 1, getGame().getPlayer2());
                     bestValue = Math.max(bestValue, eval);
+                    System.out.println("MAX, BEST VALUE=" + bestValue + ", DEPTH=" + depth);
                 }
             } catch (InvalidMoveException e) {
                 e.printStackTrace();
@@ -69,17 +99,13 @@ public class AI extends Player {
         } else {
             // MIN player's turn
             int bestValue = Integer.MAX_VALUE;
-            List<MoveChain> moveChains = new ArrayList<MoveChain>();
             try {
-                // Get all valid chains of moves.
-                moveChains = getGame().getMoveChains(state, player, moveChains, new MoveChain());
-
                 // Recursively find the best value
-                for (MoveChain moveChain : moveChains) {
+                for (MoveChain moveChain : getGame().getMoveChains(state, player)) {
                     int eval = minimax(getGame().doMoveChain(state, moveChain), depth - 1, getGame().getPlayer1());
                     bestValue = Math.min(bestValue, eval);
+                    System.out.println("MIN, BEST VALUE=" + bestValue + ", DEPTH=" + depth);
                 }
-
             } catch (InvalidMoveException e) {
                 e.printStackTrace();
             }
@@ -110,5 +136,25 @@ public class AI extends Player {
         }
 
         return score;
+    }
+
+    public int getBestValue(int value1, int value2) {
+        boolean isMax = this == getGame().getPlayer1();
+
+        if (isMax) {
+            return Math.max(value1, value2);
+        } else {
+            return Math.min(value1, value2);
+        }
+    }
+
+    public int getWorstValue() {
+        boolean isMax = this == getGame().getPlayer1();
+
+        if (isMax) {
+            return Integer.MIN_VALUE;
+        } else {
+            return Integer.MAX_VALUE;
+        }
     }
 }

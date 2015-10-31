@@ -24,6 +24,10 @@ public class Game {
         this.player2 = player2;
         this.winner = null;
 
+        player1.setGame(this);
+        player2.setGame(this);
+
+
         Cell[][] board = Utils.generateInitialBoard(Game.ROWS, Game.COLS, player1, player2);
         gameState = new State(board, startingPlayer, null);
     }
@@ -89,7 +93,11 @@ public class Game {
         return currentState;
     }
 
-    public List<MoveChain> getMoveChains(State state, Player player, List<MoveChain> moveChains, MoveChain moveChain) throws InvalidMoveException {
+    public List<MoveChain> getMoveChains(State state, Player player) throws InvalidMoveException {
+        return getMoveChainsHelper(state, player, new ArrayList<MoveChain>(), new MoveChain());
+    }
+
+    private List<MoveChain> getMoveChainsHelper(State state, Player player, List<MoveChain> moveChains, MoveChain moveChain) throws InvalidMoveException {
         if (player != state.getTurn()) {
             return moveChains;
         }
@@ -105,10 +113,10 @@ public class Game {
             if (nextState.getTurn() != player) {
                 // End of move chaining
                 moveChains.add(clonedMoveChain);
-                System.out.println(clonedMoveChain.getMoves());
+//                System.out.println(clonedMoveChain.getMoves());
             } else {
                 // Moves still available to chain together
-                getMoveChains(nextState, player, moveChains, clonedMoveChain);
+                getMoveChainsHelper(nextState, player, moveChains, clonedMoveChain);
             }
         }
 
