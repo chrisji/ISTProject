@@ -89,7 +89,7 @@ public class AI extends Player {
                 for (MoveChain moveChain : getGame().getMoveChains(state, player)) {
                     int eval = minimax(getGame().doMoveChain(state, moveChain), depth - 1, getGame().getPlayer2());
                     bestValue = Math.max(bestValue, eval);
-                    System.out.println("MAX, BEST VALUE=" + bestValue + ", DEPTH=" + depth);
+//                    System.out.println("MAX, BEST VALUE=" + bestValue + ", DEPTH=" + depth);
                 }
             } catch (InvalidMoveException e) {
                 e.printStackTrace();
@@ -104,7 +104,7 @@ public class AI extends Player {
                 for (MoveChain moveChain : getGame().getMoveChains(state, player)) {
                     int eval = minimax(getGame().doMoveChain(state, moveChain), depth - 1, getGame().getPlayer1());
                     bestValue = Math.min(bestValue, eval);
-                    System.out.println("MIN, BEST VALUE=" + bestValue + ", DEPTH=" + depth);
+//                    System.out.println("MIN, BEST VALUE=" + bestValue + ", DEPTH=" + depth);
                 }
             } catch (InvalidMoveException e) {
                 e.printStackTrace();

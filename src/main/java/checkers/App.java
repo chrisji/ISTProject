@@ -22,7 +22,7 @@ public class App {
         ai2.setGame(g);
         human.setGame(g);
 
-        while (!g.hasWinner()) {
+        while (!g.hasWinner(g.getGameState())) {
             try {
                 Utils.printBoard(g.getGameState().getBoard());
 
@@ -51,6 +51,6 @@ public class App {
             }
         }
 
-        System.out.println(g.getWinner().getName() + " WINS!");
+        System.out.println(g.getWinner(g.getGameState()).getName() + " WINS!");
     }
 }

@@ -14,6 +14,15 @@ public class MoveChain implements Cloneable {
         this.moves = new ArrayList<Move>();
     }
 
+    public MoveChain(Move... moves) {
+        this.moves = new ArrayList<Move>();
+
+        for (Move m: moves) {
+            this.moves.add(m);
+            System.out.println(m);
+        }
+    }
+
     public void addMove(Move move) {
         this.moves.add(move);
     }

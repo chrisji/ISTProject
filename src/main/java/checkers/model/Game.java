@@ -34,21 +34,34 @@ public class Game {
 
     public Player incrementTurn(Player player) {
         return player == player1 ? player2 : player1;
+    }
 
+    /**
+     * Returns `true` if the current
+     * @param state
+     * @return
+     */
+    public boolean hasWinner(State state) {
+        return getWinner(state) != null;
+    }
+
+    /**
+     * Returns the "winning" player for a given state, or `null` if no player has won. A player is declared winner if
+     * they have no more valid moves: this can occur if the player has no more pieces left, or no remaining pieces can
+     * be validly moved.
+     *
+     * @param state the state to check if a player has won.
+     * @return the winning `Player` if one exists, `null` otherwise.
+     */
+    public Player getWinner(State state) {
         // Check for a winner (current player doesn't have any valid moves left)
-//        if (currentTurn == player1 && getValidPlayer1Moves().isEmpty()) {
-//            winner = player2;
-//        } else if (currentTurn == player2 && getValidPlayer2Moves().isEmpty()) {
-//            winner = player1;
-//        }
-    }
+        if (state.getTurn() == player1 && getValidPlayer1Moves(state).isEmpty()) {
+            return player2; // Player 1 has no more valid moves... Player 2 wins.
+        } else if (state.getTurn() == player2 && getValidPlayer2Moves(state).isEmpty()) {
+            return player1; // Player 2 has no more valid moves... Player 1 wins.
+        }
 
-    public boolean hasWinner() {
-        return getWinner() != null;
-    }
-
-    public Player getWinner() {
-        return this.winner;
+        return null; // No player has won.
     }
 
     public State movePiece(State currentState, Move move) throws InvalidMoveException {
@@ -83,6 +96,15 @@ public class Game {
         return new State(board, player, currentPiece);
     }
 
+    /**
+     * Given a `State` and a `MoveChain`, return the resulting state obtained by applying the
+     * `MoveChain` to the `State`.
+     *
+     * @param state `State` to apply the `MoveChain` to.
+     * @param moveChain `MoveChain` to apply to the state.
+     * @return the resultant `State` obtained by applying the `MoveChain to the give state.
+     * @throws InvalidMoveException if any `Move` in the `MoveChain` is not a legal/valid move.
+     */
     public State doMoveChain(State state, MoveChain moveChain) throws InvalidMoveException {
         State currentState = state;
 
