@@ -12,7 +12,7 @@ public class CellTest {
 
     @Test
     public void testRemoveContents() throws Exception {
-        Player player = new Player("player1");
+        Player player = new Player("player");
         Piece piece = new Piece(player);
         Cell cell = new Cell(piece);
 
@@ -41,7 +41,7 @@ public class CellTest {
 
     @Test
     public void testClone() throws Exception {
-        Player player = new Player("player1");
+        Player player = new Player("player");
         Piece piece = new Piece(player);
         Cell cell = new Cell(piece);
 

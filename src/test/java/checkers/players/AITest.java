@@ -51,6 +51,10 @@ public class AITest {
         System.out.println(p2.nextMoveChain().getMoves());
     }
 
+    /**
+     * Play-through test at depth 2.
+     * @throws Exception
+     */
     @Test
     public void testMinimaxDepth2() throws Exception {
         AI ai = new AI("A", 2);
