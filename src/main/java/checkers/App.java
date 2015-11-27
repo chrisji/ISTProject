@@ -1,5 +1,6 @@
 package checkers;
 
+import checkers.graphics.GUI;
 import checkers.model.Game;
 import checkers.model.Move;
 import checkers.model.MoveChain;
@@ -12,8 +13,10 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
+        GUI gui = new GUI();
+
         AI ai = new RandomAI("AI");
-        AI ai2 = new AI("BI", 2);
+        AI ai2 = new AI("BI", 8);
         Player human = new Player("Human");
 
         Game g = new Game(ai2, human, human);
