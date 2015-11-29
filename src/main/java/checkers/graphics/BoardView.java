@@ -32,7 +32,6 @@ public class BoardView extends JPanel {
     public void initEmptyBoard() {
         // Reset grid layout
         this.removeAll();
-//        this.setLayout(new GridLayout(Game.ROWS, Game.COLS)); // TODO remove this unneeded line?
 
         for (int i = 0; i < Game.ROWS; i++) {
             for (int j = 0; j < Game.COLS; j++) {
@@ -52,7 +51,6 @@ public class BoardView extends JPanel {
 
     public void updateGrid(final Controller controller) {
         this.removeAll();
-//        this.setLayout(new GridLayout(Game.ROWS, Game.COLS)); // TODO remove this unneeded line?
 
         State gameState = controller.getGame().getGameState();
         Utils.printBoard(gameState.getBoard());
@@ -164,13 +162,13 @@ public class BoardView extends JPanel {
      * The grid layout stores components linearly, therefore this method first converts
      * the 2D co-ordinates into a single linear index for use with the grid layout.
      *
-     * @param i row of the `Component` to return
-     * @param j column of the `Component` to return
+     * @param row row of the `Component` to return
+     * @param col column of the `Component` to return
      * @return Component stored at the provided co-ordinates in the grid layout.
      */
-    private Component getComponentFromGrid(int i, int j) {
+    private Component getComponentFromGrid(int row, int col) {
         // Convert 2D co-ordinates to linear index for use with the grid layout.
-        int index = (i*Game.COLS) + j;
+        int index = (row*Game.COLS) + col;
 
         // Return the `Component` from the grid layout.
         return this.getComponent(index);
