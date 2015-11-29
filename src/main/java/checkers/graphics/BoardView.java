@@ -71,12 +71,6 @@ public class BoardView extends JPanel {
                     // Add listener for click events
                     square.addMouseListener(new MouseAdapter() {
                         @Override
-                        public void mouseClicked(MouseEvent e) {
-                            super.mouseClicked(e);
-                            doAction();
-                        }
-
-                        @Override
                         public void mousePressed(MouseEvent e) {
                             super.mouseClicked(e);
                             doAction();
@@ -100,12 +94,6 @@ public class BoardView extends JPanel {
 
                     // Add listener for click events
                     square.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            super.mouseClicked(e);
-                            doAction();
-                        }
-
                         @Override
                         public void mousePressed(MouseEvent e) {
                             super.mousePressed(e);
