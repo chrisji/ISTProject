@@ -14,6 +14,7 @@ import checkers.players.RandomAI;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 /**
  * @author Chris Inskip
@@ -63,8 +64,24 @@ public class Controller extends JFrame {
         return game.getStartingPlayer();
     }
 
+    // TODO: TIDY UP
     public void updateBoard() {
         boardView.updateGrid(this);
+        boardView.revalidate();
+        mainView.revalidate();
+        this.revalidate();
+
+        mainView.repaint();
+        boardView.repaint();
+        this.repaint();
+
+        boardView.requestFocus();
+        mainView.requestFocus();
+        this.requestFocus();
+    }
+
+    // TODO: tidy up
+    public void refreshBoard() {
         boardView.revalidate();
         mainView.revalidate();
         this.revalidate();
@@ -136,33 +153,73 @@ public class Controller extends JFrame {
     // TODO REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private void doAITurn() {
         try {
-            // Do AI move
-            if (game.getGameState().getTurn() instanceof AI) {
-                final MoveChain moves = ((AI) game.getPlayer1()).nextMoveChain();
+            final List<Move> moves = ((AI) game.getPlayer1()).nextMoveChain().getMoves();
 
-                for (Move m: moves.getMoves()) {
-
-                    final Move chainedMove = m;
-                    ActionListener listener = new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                            try {
-                                game.setGameState(game.movePiece(game.getGameState(), chainedMove));
-                                updateBoard();
-                            } catch (InvalidMoveException me){
-
-                            }
-                        }
-                    };
-                    Timer timer = new Timer(1000, listener);
-                    timer.setRepeats(false);
-                    timer.start();
+            final Timer thinkingTimer = new Timer(1000, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    doNextAIMove(moves, 0);
                 }
-            }
+            });
+            thinkingTimer.setRepeats(false);
+            thinkingTimer.start();
+
+
         } catch (InvalidMoveException e) {
             e.printStackTrace();
-            // Invalid move, tell the main view
-            // TODO
-            updateBoard();
+        }
+    }
+
+    private void doNextAIMove(final List<Move> moves, final int moveNumber) {
+        if (moveNumber < moves.size()) {
+            final Move chainedMove = moves.get(moveNumber);
+
+            final Timer highlight1Timer = new Timer(1000, null);
+            final Timer highlight2Timer = new Timer(1000, null);
+            final Timer moveTimer = new Timer(500, null);
+
+            // Highlight the moving from square, and then move onto the next sequence of the animation
+            ActionListener highlight1Listener = new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    boardView.highlightSquare(chainedMove.getFromRow(), chainedMove.getFromCol());
+                    refreshBoard();
+                    highlight2Timer.start();
+                }
+            };
+
+            // Highlight the moving to square, and then move onto the next sequence of the animation
+            ActionListener highlight2Listener = new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    boardView.highlightSquare(chainedMove.getToRow(), chainedMove.getToCol());
+                    refreshBoard();
+                    moveTimer.start();
+                }
+            };
+
+            // Make the move, and then perform the next move animation (in the case of multi jumps)
+            ActionListener moveListener = new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        game.setGameState(game.movePiece(game.getGameState(), chainedMove));
+
+                        // Updates the board (will also remove previous highlights)
+                        updateBoard();
+                        doNextAIMove(moves, moveNumber + 1);
+                    } catch (InvalidMoveException me) {
+                        me.printStackTrace();
+                    }
+                }
+            };
+
+            highlight1Timer.addActionListener(highlight1Listener);
+            highlight1Timer.setRepeats(false);
+
+            highlight2Timer.addActionListener(highlight2Listener);
+            highlight2Timer.setRepeats(false);
+
+            moveTimer.addActionListener(moveListener);
+            moveTimer.setRepeats(false);
+
+            highlight1Timer.start();
         }
     }
 

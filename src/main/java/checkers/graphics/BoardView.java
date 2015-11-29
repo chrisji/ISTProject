@@ -138,6 +138,17 @@ public class BoardView extends JPanel {
         }
     }
 
+    public void highlightSquare(int row, int col) {
+        try {
+            // Select square at the given position
+            BlackSquarePanel squareToSelect = ((BlackSquarePanel) getComponentFromGrid(row, col));
+            squareToSelect.select();
+        } catch (ClassCastException e) {
+            // Component was not a BlackSquarePanel
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Returns `true` if the given position is the position of a red square.
      *
