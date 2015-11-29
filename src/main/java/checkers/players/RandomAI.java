@@ -1,7 +1,6 @@
 package checkers.players;
 
 import checkers.exceptions.InvalidMoveException;
-import checkers.model.Move;
 import checkers.model.MoveChain;
 
 import java.util.List;
@@ -16,12 +15,19 @@ public class RandomAI extends AI {
     private Random rand;
 
     public RandomAI(String name) {
-        super(name, 0);
+        super(name);
         this.rand = new Random();
     }
 
     public MoveChain nextMoveChain() throws InvalidMoveException {
         List<MoveChain> moveChains = getGame().getMoveChains(getGame().getGameState(), this);
-        return moveChains.get(rand.nextInt(moveChains.size()));
+
+        // Return a random valid move chain, if one exists.
+        if (!moveChains.isEmpty()) {
+            return moveChains.get(rand.nextInt(moveChains.size()));
+        }
+
+        // No possible moves.
+        return null;
     }
 }

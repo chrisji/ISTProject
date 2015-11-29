@@ -24,8 +24,8 @@ public class AITest {
 
     @Test
     public void testMinimax() throws Exception {
-        AI p1 = new AI("1", 2);
-        AI p2 = new AI("2", 2);
+        AI p1 = new AIMiniMax("1", 2);
+        AI p2 = new AIMiniMax("2", 2);
 
         Game game = new Game(p1, p2, p1);
 
@@ -57,7 +57,7 @@ public class AITest {
      */
     @Test
     public void testMinimaxDepth2() throws Exception {
-        AI ai = new AI("A", 2);
+        AI ai = new AIMiniMax("A", 2);
         Player human = new Player("H");
         Game game = new Game(ai, human, human);
 
@@ -126,7 +126,7 @@ public class AITest {
 
     @Test
     public void testMinimaxPushingDepth() throws Exception {
-        AI ai = new AI("A", 8);
+        AI ai = new AIMiniMax("A", 8);
         Player human = new Player("H");
         Game game = new Game(ai, human, ai);
         game.doMoveChain(game.getGameState(), ai.nextMoveChain());

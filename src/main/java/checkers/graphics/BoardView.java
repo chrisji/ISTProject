@@ -76,7 +76,6 @@ public class BoardView extends JPanel {
 
                         public void doAction() {
                             controller.clickedEmptyCell(rowClicked, colClicked);
-                            revalidate();
                         }
                     });
 
@@ -103,7 +102,6 @@ public class BoardView extends JPanel {
                             if (valid) {
                                 selectPanel(rowClicked, colClicked);
                             }
-                            revalidate();
                         }
                     });
 

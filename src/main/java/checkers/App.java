@@ -6,6 +6,7 @@ import checkers.model.Move;
 import checkers.model.MoveChain;
 import checkers.model.Utils;
 import checkers.players.AI;
+import checkers.players.AIMiniMax;
 import checkers.players.Player;
 import checkers.players.RandomAI;
 
@@ -16,7 +17,7 @@ public class App {
         Controller controller = new Controller();
 
         AI ai = new RandomAI("AI");
-        AI ai2 = new AI("BI", 8);
+        AI ai2 = new AIMiniMax("BI", 8);
         Player human = new Player("Human");
 
         Game g = new Game(ai2, human, human);

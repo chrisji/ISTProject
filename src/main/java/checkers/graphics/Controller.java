@@ -6,7 +6,10 @@ import checkers.model.Game;
 import checkers.model.Move;
 import checkers.model.MoveChain;
 import checkers.players.AI;
+import checkers.players.AIAlphaBeta;
+import checkers.players.AIMiniMax;
 import checkers.players.Player;
+import checkers.players.RandomAI;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -89,7 +92,7 @@ public class Controller extends JFrame {
                 updateBoard();
 
                 // Do AI move TODO REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                if (game.getGameState().getTurn().equals(game.getPlayer1())) {
+                if (game.getGameState().getTurn() instanceof AI) {
                     final MoveChain moves = ((AI) game.getPlayer1()).nextMoveChain();
 
                     for (Move m: moves.getMoves()) {
@@ -147,9 +150,15 @@ public class Controller extends JFrame {
 
     public static void main(String[] args) {
         // Example game config
-        AI ai = new AI("AI", 4);
+        AI firstAI = new AI("AI");
+        AI minimax = new AIMiniMax("MM", 10);
+        AI alphaBeta = new AIAlphaBeta("AB", 8);
+        AI randAI = new RandomAI("Rand_AI");
+
         Player human = new Player("HUMAN");
-        Game g = new Game(ai, human, human);
+        Player human2 = new Player("HUMAN");
+
+        Game g = new Game(minimax, human, human);
 
         Controller controller = new Controller();
         controller.setGame(g);
