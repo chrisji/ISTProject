@@ -16,19 +16,24 @@ import java.awt.event.MouseEvent;
  */
 public class BoardView extends JPanel {
 
-    BlackSquarePanel selectedPanel;
+    // Currently selected square
+    private BlackSquarePanel selectedPanel;
 
-    public BoardView(final Controller controller) {
-        this.setBackground(new Color(40, 100, 0));
-        this.setSize(500, 500);
+    // Panel properties
+    private static final int BOARD_WIDTH = 500;
+    private static final int BOARD_HEIGHT = 500;
+
+    public BoardView() {
+        this.setSize(BOARD_WIDTH, BOARD_HEIGHT);
         this.setLayout(new GridLayout(Game.ROWS, Game.COLS));
-
         initEmptyBoard();
     }
 
     public void initEmptyBoard() {
+        // Reset grid layout
         this.removeAll();
-        this.setLayout(new GridLayout(Game.ROWS, Game.COLS));
+//        this.setLayout(new GridLayout(Game.ROWS, Game.COLS)); // TODO remove this unneeded line?
+
         for (int i = 0; i < Game.ROWS; i++) {
             for (int j = 0; j < Game.COLS; j++) {
                 if (i % 2 == 0 && j % 2 == 0) {
@@ -47,7 +52,7 @@ public class BoardView extends JPanel {
 
     public void updateGrid(final Controller controller) {
         this.removeAll();
-        this.setLayout(new GridLayout(Game.ROWS, Game.COLS));
+//        this.setLayout(new GridLayout(Game.ROWS, Game.COLS)); // TODO remove this unneeded line?
 
         State gameState = controller.getGame().getGameState();
         Utils.printBoard(gameState.getBoard());
@@ -55,14 +60,9 @@ public class BoardView extends JPanel {
 
         for (int i = 0; i < Game.ROWS; i++) {
             for (int j = 0; j < Game.COLS; j++) {
-                if (i % 2 == 0 && j % 2 == 0) {
-                    // Position of an empty red square
+                if (isRedSquarePosition(i, j)) {
                     this.add(new RedSqaurePanel());
-                } else if (i % 2 != 0 && j % 2 != 0) {
-                    // Position of an empty red square
-                    this.add(new RedSqaurePanel());
-                } else if (boardState[i][j].isEmpty()) {
-                    // Position of an empty black square
+                } else if (boardState[i][j].isEmpty()) { // Empty black square
                     JPanel square = new BlackSquarePanel();
 
                     final int rowClicked = i;
@@ -89,8 +89,8 @@ public class BoardView extends JPanel {
                     });
 
                     this.add(square);
-                } else {
-                    // Position of an occupied black square
+                } else { // Occupied black square
+                    // Get details about checker in that position, and create the square accordingly.
                     boolean isRed = boardState[i][j].getContents().getPlayer() == controller.getRedPlayer();
                     boolean isCrowned = boardState[i][j].getContents().isCrowned();
                     final BlackSquarePanel square = new BlackSquarePanel(isRed, isCrowned);
@@ -130,32 +130,61 @@ public class BoardView extends JPanel {
         this.revalidate();
     }
 
-    private void selectPanel(int i, int j) {
-        if (i % 2 == 0 && j % 2 == 0) {
-            // Red cell, no-op
-        } else if (i % 2 != 0 && j % 2 != 0) {
-            // Red cell, no-op
-        } else {
-            // Deselect old cell
+    private void selectPanel(int row, int col) {
+        if (isBlackSquarePosition(row, col)) {
+            // Deselect previously selected square
             if (selectedPanel != null) {
                 selectedPanel.deselect();
             }
 
-            // Select new cell
-            selectedPanel = ((BlackSquarePanel) getComponentFromGrid(i, j));
-            selectedPanel.select();
+            try {
+                // Select square at the given position
+                selectedPanel = ((BlackSquarePanel) getComponentFromGrid(row, col));
+                selectedPanel.select();
+            } catch (ClassCastException e) {
+                // Component was not a BlackSquarePanel - should not happen!
+                e.printStackTrace();
+            }
         }
     }
 
-    private Component getComponentFromGrid(int i, int j) {
-        int index = i*Game.COLS + j;
-        return this.getComponent(index);
+    /**
+     * Returns `true` if the given position is the position of a red square.
+     *
+     * @param row row of the position to check.
+     * @param col column of the position to check.
+     * @return `true` if the given position is the position of a red square.
+     */
+    private boolean isRedSquarePosition(int row, int col) {
+        return (row % 2 == 0 && col % 2 == 0) || (row % 2 != 0 && col % 2 != 0);
     }
 
-//    private void deselectAllOccupied() {
-//        for (Component c : getComponents()) {
-//            System.out.println(c);
-//            if
-//        }
-//    }
+    /**
+     * Returns `true` if the given position is the position of a black square.
+     *
+     * @param row row of the position to check.
+     * @param col column of the position to check.
+     * @return `true` if the given position is the position of a black square.
+     */
+    private boolean isBlackSquarePosition(int row, int col) {
+        return !isRedSquarePosition(row, col);
+    }
+
+    /**
+     * Returns the `Component` stored at the provided co-ordinates in the grid layout.
+     *
+     * The grid layout stores components linearly, therefore this method first converts
+     * the 2D co-ordinates into a single linear index for use with the grid layout.
+     *
+     * @param i row of the `Component` to return
+     * @param j column of the `Component` to return
+     * @return Component stored at the provided co-ordinates in the grid layout.
+     */
+    private Component getComponentFromGrid(int i, int j) {
+        // Convert 2D co-ordinates to linear index for use with the grid layout.
+        int index = (i*Game.COLS) + j;
+
+        // Return the `Component` from the grid layout.
+        return this.getComponent(index);
+    }
 }

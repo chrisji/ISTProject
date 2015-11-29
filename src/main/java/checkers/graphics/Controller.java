@@ -5,7 +5,6 @@ import checkers.model.Cell;
 import checkers.model.Game;
 import checkers.model.Move;
 import checkers.model.MoveChain;
-import checkers.model.Piece;
 import checkers.players.AI;
 import checkers.players.Player;
 
@@ -36,7 +35,7 @@ public class Controller extends JFrame {
 
     public Controller() {
         // Init views
-        boardView = new BoardView(this);
+        boardView = new BoardView();
         preGameSettingsView = new PreGameSettingsView();
         mainView = new MainView(boardView, preGameSettingsView);
 
@@ -110,7 +109,6 @@ public class Controller extends JFrame {
                         timer.setRepeats(false);
                         timer.start();
                     }
-
                 }
 
                 System.out.println("\t...move successful! (" + fromRow + ", " + fromCol + ") to (" + toRow + ", " + toCol + ")");
@@ -129,12 +127,13 @@ public class Controller extends JFrame {
     public boolean clickedOccupiedCell(int fromRow, int fromCol) {
         System.out.println("Clicked occupied cell (" + fromRow + ", " + fromCol + ")");
 
-        Player currentPlayer = game.getGameState().getTurn();
-
+        // Get the underlying cell that has been clicked.
         Cell clickedCell = game.getGameState().getBoard()[fromRow][fromCol];
-        Player pieceOwner =  clickedCell.getContents().getPlayer();
 
-        // Return true if the piece can be moved by the current player.
+        Player currentPlayer = game.getGameState().getTurn();
+        Player pieceOwner = clickedCell.getContents().getPlayer();
+
+        // Return `true` if the piece can be moved by the current player (i.e. it's their turn).
         if (currentPlayer.equals(pieceOwner)) {
             moveInProgress = true;
             this.fromRow = fromRow;
