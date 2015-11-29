@@ -91,28 +91,7 @@ public class Controller extends JFrame {
                 game.setGameState(game.movePiece(game.getGameState(), move));
                 updateBoard();
 
-                // Do AI move TODO REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                if (game.getGameState().getTurn() instanceof AI) {
-                    final MoveChain moves = ((AI) game.getPlayer1()).nextMoveChain();
-
-                    for (Move m: moves.getMoves()) {
-
-                        final Move chainedMove = m;
-                        ActionListener listener = new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {
-                                try {
-                                    game.setGameState(game.movePiece(game.getGameState(), chainedMove));
-                                    updateBoard();
-                                } catch (InvalidMoveException me){
-
-                                }
-                            }
-                        };
-                        Timer timer = new Timer(1000, listener);
-                        timer.setRepeats(false);
-                        timer.start();
-                    }
-                }
+                doAITurn();
 
                 System.out.println("\t...move successful! (" + fromRow + ", " + fromCol + ") to (" + toRow + ", " + toCol + ")");
             } catch (InvalidMoveException e) {
@@ -148,20 +127,61 @@ public class Controller extends JFrame {
         }
     }
 
+
+    public void startTurnSequence() {
+        if (game.getStartingPlayer() instanceof AI) {
+            doAITurn();
+        }
+    }
+
+    // TODO REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private void doAITurn() {
+        try {
+            // Do AI move
+            if (game.getGameState().getTurn() instanceof AI) {
+                final MoveChain moves = ((AI) game.getPlayer1()).nextMoveChain();
+
+                for (Move m: moves.getMoves()) {
+
+                    final Move chainedMove = m;
+                    ActionListener listener = new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            try {
+                                game.setGameState(game.movePiece(game.getGameState(), chainedMove));
+                                updateBoard();
+                            } catch (InvalidMoveException me){
+
+                            }
+                        }
+                    };
+                    Timer timer = new Timer(1000, listener);
+                    timer.setRepeats(false);
+                    timer.start();
+                }
+            }
+        } catch (InvalidMoveException e) {
+            e.printStackTrace();
+            // Invalid move, tell the main view
+            // TODO
+            updateBoard();
+        }
+    }
+
     public static void main(String[] args) {
         // Example game config
         AI firstAI = new AI("AI");
-        AI minimax = new AIMiniMax("MM", 10);
-        AI alphaBeta = new AIAlphaBeta("AB", 8);
+        AI minimax = new AIMiniMax("MM", 5);
+        AI alphaBeta = new AIAlphaBeta("AB", 5);
         AI randAI = new RandomAI("Rand_AI");
 
         Player human = new Player("HUMAN");
         Player human2 = new Player("HUMAN");
 
-        Game g = new Game(minimax, human, human);
+        Game g = new Game(minimax, human, minimax);
 
         Controller controller = new Controller();
         controller.setGame(g);
         controller.updateBoard();
+        controller.startTurnSequence();
     }
 }

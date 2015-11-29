@@ -4,6 +4,7 @@ import checkers.model.Cell;
 import checkers.model.Game;
 import checkers.model.State;
 import checkers.model.Utils;
+import checkers.players.AI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -86,24 +87,29 @@ public class BoardView extends JPanel {
                     boolean isCrowned = boardState[i][j].getContents().isCrowned();
                     final BlackSquarePanel square = new BlackSquarePanel(isRed, isCrowned);
 
-                    final int rowClicked = i;
-                    final int colClicked = j;
 
-                    // Add listener for click events
-                    square.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mousePressed(MouseEvent e) {
-                            super.mousePressed(e);
-                            doAction();
-                        }
+                    boolean isAI = boardState[i][j].getContents().getPlayer() instanceof AI;
 
-                        public void doAction() {
-                            boolean valid = controller.clickedOccupiedCell(rowClicked, colClicked);
-                            if (valid) {
-                                selectPanel(rowClicked, colClicked);
+                    if (!isAI) {
+                        final int rowClicked = i;
+                        final int colClicked = j;
+
+                        // Add listener for click events
+                        square.addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mousePressed(MouseEvent e) {
+                                super.mousePressed(e);
+                                doAction();
                             }
-                        }
-                    });
+
+                            public void doAction() {
+                                boolean valid = controller.clickedOccupiedCell(rowClicked, colClicked);
+                                if (valid) {
+                                    selectPanel(rowClicked, colClicked);
+                                }
+                            }
+                        });
+                    }
 
                     this.add(square);
                 }
