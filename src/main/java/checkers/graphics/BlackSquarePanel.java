@@ -22,17 +22,17 @@ public class BlackSquarePanel extends SquarePanel {
     private final Color SELECTED_BORDER_COLOUR = new Color(60, 100, 60);
 
     /**
-     * Constructor for empty squares
+     * Constructor for empty black squares.
      */
     public BlackSquarePanel() {
         this.setBackground(BACKGROUND_COLOUR);
     }
 
     /**
-     * Constructor for non-empty squares
+     * Constructor for non-empty black squares.
      *
-     * @param isRed `true` if the piece is red, `false` for black
-     * @param isCrowned `true` if the piece is crowned, `false` for uncrowned
+     * @param isRed `true` if the piece is red, `false` if black.
+     * @param isCrowned `true` if the piece is crowned, `false` if uncrowned.
      */
     public BlackSquarePanel(boolean isRed, boolean isCrowned) {
         System.out.println("Adding piece to black square (RED=" + isRed + ", CROWNED=" + isCrowned + ")");
@@ -54,7 +54,7 @@ public class BlackSquarePanel extends SquarePanel {
     }
 
     /**
-     * Changes the appearance of the square to show that it is selected.
+     * Changes the appearance of the square to show that it is currently selected.
      */
     public void select() {
         this.setBackground(SELECTED_BACKGROUND_COLOUR);
@@ -62,7 +62,7 @@ public class BlackSquarePanel extends SquarePanel {
     }
 
     /**
-     * Reverts the square back to its default appearance, i.e. before it was selected
+     * Reverts the square back to its default appearance, i.e. before it was selected.
      */
     public void deselect() {
         this.setBackground(BACKGROUND_COLOUR);
