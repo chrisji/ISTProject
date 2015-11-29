@@ -11,22 +11,24 @@ import java.util.List;
  * @version 03/10/2015
  */
 public class Game {
-    private State gameState;
-    private static final int ROWS = 8;
-    private static final int COLS = 8;
 
+    public static final int ROWS = 8;
+    public static final int COLS = 8;
+
+    private State gameState;
     private Player player1;
     private Player player2;
     private Player winner;
+    private Player startingPlayer;
 
     public Game(Player player1, Player player2, Player startingPlayer) {
         this.player1 = player1;
         this.player2 = player2;
+        this.startingPlayer = startingPlayer;
         this.winner = null;
 
         player1.setGame(this);
         player2.setGame(this);
-
 
         Cell[][] board = Utils.generateInitialBoard(Game.ROWS, Game.COLS, player1, player2);
         gameState = new State(board, startingPlayer, null);
@@ -377,6 +379,10 @@ public class Game {
         return false;
     }
 
+    public boolean hasChangedPlayer(State fromState, State toState) {
+        return fromState.getTurn().equals(toState.getTurn());
+    }
+
     public State getGameState() {
         return this.gameState;
     }
@@ -391,5 +397,9 @@ public class Game {
 
     public Player getPlayer2() {
         return this.player2;
+    }
+
+    public Player getStartingPlayer() {
+        return this.startingPlayer;
     }
 }
