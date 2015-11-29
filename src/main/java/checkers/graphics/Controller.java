@@ -98,7 +98,6 @@ public class Controller extends JFrame {
                 e.printStackTrace();
                 // Invalid move, tell the main view
                 // TODO
-                updateBoard();
                 return false;
             }
         }
