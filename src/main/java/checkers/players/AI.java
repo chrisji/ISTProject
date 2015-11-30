@@ -14,4 +14,6 @@ public abstract class AI extends Player {
     }
 
     public abstract MoveChain nextMoveChain() throws InvalidMoveException;
+
+    public abstract void setDifficulty(int difficultyLevel);
 }

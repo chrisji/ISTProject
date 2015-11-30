@@ -33,7 +33,6 @@ public class BoardView extends JPanel {
         this.setMaximumSize(dimension);
 
         this.setBackground(new Color(47, 33, 16));
-
         this.setLayout(new GridLayout(Game.ROWS, Game.COLS));
         this.setBorder(BorderFactory.createLineBorder(new Color(47, 33, 16), 5));
 
@@ -97,7 +96,6 @@ public class BoardView extends JPanel {
                     boolean isCrowned = boardState[i][j].getContents().isCrowned();
                     final BlackSquarePanel square = new BlackSquarePanel(isBlack, isCrowned);
 
-
                     boolean isAI = boardState[i][j].getContents().getPlayer() instanceof AI;
 
                     if (!isAI) {
@@ -116,6 +114,8 @@ public class BoardView extends JPanel {
                                 boolean valid = controller.clickedOccupiedCell(rowClicked, colClicked);
                                 if (valid) {
                                     selectPanel(rowClicked, colClicked);
+                                } else {
+                                    deselectPanel(rowClicked, colClicked);
                                 }
                             }
                         });
@@ -145,6 +145,12 @@ public class BoardView extends JPanel {
                 // Component was not a BlackSquarePanel - should not happen!
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void deselectPanel(int row, int col) {
+        if (isBlackSquarePosition(row, col) && selectedPanel != null) {
+            selectedPanel.deselect();
         }
     }
 

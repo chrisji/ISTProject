@@ -189,4 +189,8 @@ public class AIAlphaBeta extends AI {
             return Integer.MAX_VALUE;
         }
     }
+
+    public void setDifficulty(int difficultyLevel) {
+        // TODO
+    }
 }

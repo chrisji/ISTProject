@@ -9,12 +9,11 @@ import java.awt.*;
  */
 public class MainView extends JPanel {
 
-    // TODO take in settings container
     public MainView(BoardView boardView, SettingsPanel settingsPanel) {
         this.setBackground(new Color(70, 50, 22));
         this.setLayout(new BorderLayout());
 
-        JLabel titleLabel = new JLabel("IST - Checkers");
+        JLabel titleLabel = new JLabel("IST Checkers");
         titleLabel.setFont(new Font("Verdana", Font.BOLD, 20));
         titleLabel.setForeground(Color.WHITE);
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));

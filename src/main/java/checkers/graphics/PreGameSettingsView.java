@@ -29,6 +29,9 @@ public class PreGameSettingsView extends JPanel {
     private Player bottomPlayer;
     private Player startingPlayer;
 
+    private int topDifficulty = -1;
+    private int bottomDifficulty = -1;
+
     JComboBox<Object> topPlayerComboBox;
     JComboBox<Object> bottomPlayerComboBox;
     JComboBox<Object> startingPlayerComboBox;
@@ -37,8 +40,8 @@ public class PreGameSettingsView extends JPanel {
 
     public PreGameSettingsView(Controller controller) {
         this.controller = controller;
-        this.setLayout(new FlowLayout(FlowLayout.LEFT));
-        this.setPreferredSize(new Dimension(350, 600));
+        this.setLayout(new GridLayout(4, 1));
+        this.setPreferredSize(new Dimension(350, 500));
         this.setOpaque(false);
 
         topPlayer = PlayerFactory.buildPlayer(PlayerFactory.HUMAN, "A");
@@ -89,6 +92,8 @@ public class PreGameSettingsView extends JPanel {
 
         startingPlayerComboBox = new JComboBox<Object>(new String[]{"Top", "Bottom"});
         JPanel panel = new JPanel();
+        panel.setSize(300, 30);
+        panel.setBackground(Color.green);
         panel.setOpaque(false);
         panel.add(label);
         panel.add(startingPlayerComboBox);
@@ -100,14 +105,19 @@ public class PreGameSettingsView extends JPanel {
         JButton startGameButton = new JButton("Start Game");
         startGameButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 // Build selected top player
                 String selectedTopPlayer = (String) topPlayerComboBox.getSelectedItem();
                 setTopPlayer(PlayerFactory.buildPlayer(possiblePlayers.get(selectedTopPlayer), selectedTopPlayer));
+                if (topDifficulty >= 0 && topPlayer instanceof AI) {
+                    ((AI) topPlayer).setDifficulty(topDifficulty);
+                }
 
                 // Build selected bottom player
                 String selectedBottomPlayer = (String) bottomPlayerComboBox.getSelectedItem();
                 setBottomPlayer(PlayerFactory.buildPlayer(possiblePlayers.get(selectedBottomPlayer), selectedBottomPlayer));
+                if (topDifficulty >= 0 && bottomPlayer instanceof AI) {
+                    ((AI) bottomPlayer).setDifficulty(bottomDifficulty);
+                }
 
                 // Find whether starting player is top or bottom
                 String selectedStartPosition = (String) startingPlayerComboBox.getSelectedItem();

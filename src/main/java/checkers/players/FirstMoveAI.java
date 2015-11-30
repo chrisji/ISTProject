@@ -26,4 +26,8 @@ public class FirstMoveAI extends AI {
         // No possible moves.
         return null;
     }
+
+    public void setDifficulty(int difficultyLevel) {
+        // No-op
+    }
 }

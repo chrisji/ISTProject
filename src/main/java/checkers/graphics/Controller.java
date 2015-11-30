@@ -142,7 +142,8 @@ public class Controller extends JFrame {
         try {
             List<MoveChain> moveChains = game.getMoveChains(game.getGameState(), game.getGameState().getTurn());
             for (MoveChain mc : moveChains) {
-                boardView.hintSelectSquare()
+                Move firstMove = mc.getMoves().get(0);
+                boardView.hintSelectSquare(firstMove.getFromRow(), firstMove.getFromCol());
             }
         } catch (InvalidMoveException e) {
             // Shouldn't happen

@@ -13,6 +13,8 @@ import java.io.IOException;
  */
 public class BlackSquarePanel extends SquarePanel {
 
+    private boolean hinted = false;
+
     // Checker image
     private BufferedImage image;
 
@@ -70,9 +72,15 @@ public class BlackSquarePanel extends SquarePanel {
     public void deselect() {
         this.setBackground(BACKGROUND_COLOUR);
         this.setBorder(BorderFactory.createEmptyBorder());
+
+        // If deselected a hinted square, set it back to hinted.
+        if (hinted) {
+            hintSelect();
+        }
     }
 
     public void hintSelect() {
+        this.hinted = true;
         this.setBackground(HINT_BACKGROUND_COLOUR);
         this.setBorder(BorderFactory.createLineBorder(HINT_BORDER_COLOUR, 3));
     }

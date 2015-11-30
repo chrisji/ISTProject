@@ -30,4 +30,8 @@ public class RandomAI extends AI {
         // No possible moves.
         return null;
     }
+
+    public void setDifficulty(int difficultyLevel) {
+        // No-op
+    }
 }

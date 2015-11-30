@@ -16,6 +16,7 @@ public class InGameSettingsPanel extends JPanel {
         this.controller = controller;
         this.setOpaque(false);
 
+        addShowHintButton();
         addBackToMainMenuButton();
     }
 
