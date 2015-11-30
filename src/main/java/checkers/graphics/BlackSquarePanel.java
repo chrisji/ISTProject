@@ -34,22 +34,22 @@ public class BlackSquarePanel extends SquarePanel {
     /**
      * Constructor for non-empty black squares.
      *
-     * @param isRed `true` if the piece is red, `false` if black.
+     * @param isBlack `true` if the piece is red, `false` if black.
      * @param isCrowned `true` if the piece is crowned, `false` if uncrowned.
      */
-    public BlackSquarePanel(boolean isRed, boolean isCrowned) {
-        System.out.println("Adding piece to black square (RED=" + isRed + ", CROWNED=" + isCrowned + ")");
+    public BlackSquarePanel(boolean isBlack, boolean isCrowned) {
+        System.out.println("Adding piece to black square (BLACK=" + isBlack + ", CROWNED=" + isCrowned + ")");
         this.setBackground(BACKGROUND_COLOUR);
 
         try {
-            if (isRed && isCrowned) { // Crowned red
-                image = ImageIO.read(new File("res/red-checker-crowned.png"));
-            } else if (isRed) { // Normal red
-                image = ImageIO.read(new File("res/red-checker.png"));
-            } else if (isCrowned) { // Crowned black
+            if (isBlack && isCrowned) { // Crowned black
                 image = ImageIO.read(new File("res/black-checker-crowned.png"));
-            } else { // Normal Black
+            } else if (isBlack) { // Normal black
                 image = ImageIO.read(new File("res/black-checker.png"));
+            } else if (isCrowned) { // Crowned red
+                image = ImageIO.read(new File("res/red-checker-crowned.png"));
+            } else { // Normal red
+                image = ImageIO.read(new File("res/red-checker.png"));
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -9,6 +9,7 @@ import java.awt.*;
  */
 public class MainView extends JPanel {
 
+    // TODO take in settings container
     public MainView(BoardView boardView, PreGameSettingsView preGameSettingsView) {
         this.setBackground(new Color(30, 241, 200));
         this.setLayout(new BorderLayout());

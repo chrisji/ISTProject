@@ -83,9 +83,9 @@ public class BoardView extends JPanel {
                     this.add(square);
                 } else { // Occupied black square
                     // Get details about checker in that position, and create the square accordingly.
-                    boolean isRed = boardState[i][j].getContents().getPlayer() == controller.getRedPlayer();
+                    boolean isBlack = boardState[i][j].getContents().getPlayer() == controller.getBlackPlayer();
                     boolean isCrowned = boardState[i][j].getContents().isCrowned();
-                    final BlackSquarePanel square = new BlackSquarePanel(isRed, isCrowned);
+                    final BlackSquarePanel square = new BlackSquarePanel(isBlack, isCrowned);
 
 
                     boolean isAI = boardState[i][j].getContents().getPlayer() instanceof AI;

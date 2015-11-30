@@ -28,11 +28,8 @@ public class Controller extends JFrame {
     MainView mainView;
     BoardView boardView;
     SettingsPanelContainer settingPanelContainer;
-    PreGameSettingsView preGameSettingsView;
-    InGameSettingsPanel inGameSettingsPanel;
 
     private Game game;
-    private Player redPlayer;
 
     private boolean moveInProgress = false;
     private int fromRow = -1;
@@ -41,12 +38,8 @@ public class Controller extends JFrame {
     public Controller() {
         // Init views
         boardView = new BoardView();
-        preGameSettingsView = new PreGameSettingsView(this);
-        inGameSettingsPanel = new InGameSettingsPanel();
-
-        settingPanelContainer = new SettingsPanelContainer(preGameSettingsView, inGameSettingsPanel);
-
-        mainView = new MainView(boardView, preGameSettingsView);
+        settingPanelContainer = new SettingsPanelContainer(new PreGameSettingsView(this), new InGameSettingsPanel(this));
+        mainView = new MainView(boardView, new PreGameSettingsView(this));
 
         // JFrame properties
         this.add(mainView);
@@ -65,7 +58,7 @@ public class Controller extends JFrame {
         return this.game;
     }
 
-    public Player getRedPlayer() {
+    public Player getBlackPlayer() {
         return game.getStartingPlayer();
     }
 
@@ -135,6 +128,11 @@ public class Controller extends JFrame {
         startTurnSequence();
         settingPanelContainer.resetInGameSettings();
         settingPanelContainer.showInGameSettings();
+    }
+
+    public void gotoMainMenu() {
+        settingPanelContainer.resetPreGameSettings();
+        settingPanelContainer.showPreGameSettings();
     }
 
     public void startTurnSequence() {

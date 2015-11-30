@@ -7,4 +7,8 @@ import javax.swing.*;
  * @version 28/11/2015
  */
 public class InGameSettingsPanel extends JPanel {
+
+    public InGameSettingsPanel(Controller controller) {
+
+    }
 }
