@@ -14,13 +14,19 @@ import java.util.List;
  */
 public class AIMiniMax extends AI {
 
-    private Move bestNextMove;
-    private int depth;
-
+    private int depth = 1;
     private static long evalCounter = 0;
+
+    public AIMiniMax(String name) {
+        super(name);
+    }
 
     public AIMiniMax(String name, int depth) {
         super(name);
+        this.depth = depth;
+    }
+
+    public void setDepth(int depth) {
         this.depth = depth;
     }
 

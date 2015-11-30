@@ -4,9 +4,11 @@ import checkers.exceptions.InvalidMoveException;
 import checkers.model.Cell;
 import checkers.model.Game;
 import checkers.model.Move;
+import checkers.model.MoveChain;
 import checkers.players.AI;
 import checkers.players.AIAlphaBeta;
 import checkers.players.AIMiniMax;
+import checkers.players.FirstMoveAI;
 import checkers.players.Player;
 import checkers.players.RandomAI;
 
@@ -21,15 +23,16 @@ import java.util.List;
  */
 public class Controller extends JFrame {
 
-    private static final int WIDTH = 1024;
-    private static final int HEIGHT = (WIDTH / 16) * 9;
+    private static final int WIDTH = 1000;
+    private static final int HEIGHT = 600;
 
     // Views
-    MainView mainView;
-    BoardView boardView;
-    SettingsPanelContainer settingPanelContainer;
+    private MainView mainView;
+    private BoardView boardView;
+    private SettingsPanel settingsPanel;
 
     private Game game;
+    private boolean quitGameRequest = false;
 
     private boolean moveInProgress = false;
     private int fromRow = -1;
@@ -38,12 +41,12 @@ public class Controller extends JFrame {
     public Controller() {
         // Init views
         boardView = new BoardView();
-        settingPanelContainer = new SettingsPanelContainer(new PreGameSettingsView(this), new InGameSettingsPanel(this));
-        mainView = new MainView(boardView, new PreGameSettingsView(this));
+        settingsPanel = new SettingsPanel(new PreGameSettingsView(this), new InGameSettingsPanel(this));
+        mainView = new MainView(boardView, settingsPanel);
 
         // JFrame properties
         this.add(mainView);
-        this.setTitle("IST: Checkers Game  |  " + WIDTH + "x" + HEIGHT);
+        this.setTitle("144158");
         this.setSize(WIDTH, HEIGHT);
         this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -80,6 +83,9 @@ public class Controller extends JFrame {
 
         if (moveInProgress) {
             System.out.println("\t...and move was in progress");
+
+            Player currentPlayer = game.getGameState().getTurn();
+
             try {
                 // Construct move
                 Move move = new Move(fromRow, fromCol, toRow, toCol);
@@ -87,10 +93,12 @@ public class Controller extends JFrame {
                 // Attempt to apply the move
                 game.setGameState(game.movePiece(game.getGameState(), move));
                 updateBoard();
-
-                doAITurn();
-
                 System.out.println("\t...move successful! (" + fromRow + ", " + fromCol + ") to (" + toRow + ", " + toCol + ")");
+
+                // TODO refactor...
+                if (currentPlayer != game.getGameState().getTurn() && game.getGameState().getTurn() instanceof AI) {
+                    doAITurn((AI) game.getGameState().getTurn());
+                }
             } catch (InvalidMoveException e) {
                 e.printStackTrace();
                 // Invalid move, tell the main view
@@ -125,25 +133,52 @@ public class Controller extends JFrame {
 
     public void startGame() {
         updateBoard();
-        startTurnSequence();
-        settingPanelContainer.resetInGameSettings();
-        settingPanelContainer.showInGameSettings();
+        doNextTurn();
+        settingsPanel.resetInGameSettings();
+        settingsPanel.showInGameSettings();
     }
 
-    public void gotoMainMenu() {
-        settingPanelContainer.resetPreGameSettings();
-        settingPanelContainer.showPreGameSettings();
-    }
-
-    public void startTurnSequence() {
-        if (game.getStartingPlayer() instanceof AI) {
-            doAITurn();
+    public void showHint() {
+        try {
+            List<MoveChain> moveChains = game.getMoveChains(game.getGameState(), game.getGameState().getTurn());
+            for (MoveChain mc : moveChains) {
+                boardView.hintSelectSquare()
+            }
+        } catch (InvalidMoveException e) {
+            // Shouldn't happen
         }
     }
 
-    private void doAITurn() {
+    public void gotoMainMenu() {
+        moveInProgress = false;
+        quitGameRequest = false;
+
+        boardView.initEmptyBoard();
+        settingsPanel.resetPreGameSettings();
+        settingsPanel.showPreGameSettings();
+        refreshDisplay();
+    }
+
+    public void requestMainMenu() {
+        if (game.getGameState().getTurn() instanceof AI) {
+            quitGameRequest = true;
+        } else {
+            gotoMainMenu();
+        }
+    }
+
+    public void doNextTurn() {
+        if (!quitGameRequest) {
+            Player currentPlayer = game.getGameState().getTurn();
+            if (currentPlayer instanceof AI) {
+                doAITurn((AI) currentPlayer);
+            }
+        }
+    }
+
+    private void doAITurn(AI ai) {
         try {
-            final List<Move> moves = ((AI) game.getPlayer1()).nextMoveChain().getMoves();
+            final List<Move> moves = ai.nextMoveChain().getMoves();
 
             final Timer thinkingTimer = new Timer(200, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -152,15 +187,15 @@ public class Controller extends JFrame {
             });
             thinkingTimer.setRepeats(false);
             thinkingTimer.start();
-
-
         } catch (InvalidMoveException e) {
             e.printStackTrace();
         }
     }
 
     private void doNextAIMove(final List<Move> moves, final int moveNumber) {
-        if (moveNumber < moves.size()) {
+        if (quitGameRequest) {
+            gotoMainMenu();
+        } else if (moveNumber < moves.size()) {
             final Move chainedMove = moves.get(moveNumber);
 
             final Timer highlight1Timer = new Timer(700, null);
@@ -210,12 +245,14 @@ public class Controller extends JFrame {
             moveTimer.setRepeats(false);
 
             highlight1Timer.start();
+        } else if (!quitGameRequest) {
+            doNextTurn();
         }
     }
 
     public static void main(String[] args) {
         // Example game config
-        AI firstAI = new AI("AI");
+        AI firstAI = new FirstMoveAI("AI");
         AI minimax = new AIMiniMax("MM", 5);
         AI alphaBeta = new AIAlphaBeta("AB", 5);
         AI randAI = new RandomAI("Rand_AI");

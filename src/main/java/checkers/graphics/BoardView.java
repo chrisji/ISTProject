@@ -26,7 +26,17 @@ public class BoardView extends JPanel {
 
     public BoardView() {
         this.setSize(BOARD_WIDTH, BOARD_HEIGHT);
+
+        Dimension dimension = new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
+        this.setMaximumSize(dimension);
+        this.setPreferredSize(dimension);
+        this.setMaximumSize(dimension);
+
+        this.setBackground(new Color(47, 33, 16));
+
         this.setLayout(new GridLayout(Game.ROWS, Game.COLS));
+        this.setBorder(BorderFactory.createLineBorder(new Color(47, 33, 16), 5));
+
         initEmptyBoard();
     }
 
@@ -143,6 +153,17 @@ public class BoardView extends JPanel {
             // Select square at the given position
             BlackSquarePanel squareToSelect = ((BlackSquarePanel) getComponentFromGrid(row, col));
             squareToSelect.select();
+        } catch (ClassCastException e) {
+            // Component was not a BlackSquarePanel
+            e.printStackTrace();
+        }
+    }
+
+    public void hintSelectSquare(int row, int col) {
+        try {
+            // Select square at the given position
+            BlackSquarePanel squareToSelect = ((BlackSquarePanel) getComponentFromGrid(row, col));
+            squareToSelect.hintSelect();
         } catch (ClassCastException e) {
             // Component was not a BlackSquarePanel
             e.printStackTrace();

@@ -12,15 +12,21 @@ import java.util.List;
  * @author Chris Inskip
  * @version 08/10/2015
  */
-public class AIAlphaBeta extends AI { // ToDo AI class, which does first move, then extend that AI and make AI called AIMiniMax
+public class AIAlphaBeta extends AI {
 
-    private Move bestNextMove;
-    private int depth;
-
+    private int depth = 1;
     private static long evalCounter = 0;
+
+    public AIAlphaBeta(String name) {
+        super(name);
+    }
 
     public AIAlphaBeta(String name, int depth) {
         super(name);
+        this.depth = depth;
+    }
+
+    public void setDepth(int depth) {
         this.depth = depth;
     }
 
