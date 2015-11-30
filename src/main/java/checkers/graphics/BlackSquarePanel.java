@@ -21,6 +21,9 @@ public class BlackSquarePanel extends SquarePanel {
     private final Color SELECTED_BACKGROUND_COLOUR = new Color(50, 50, 50);
     private final Color SELECTED_BORDER_COLOUR = new Color(60, 100, 60);
 
+    private final Color HINT_BACKGROUND_COLOUR = new Color(50, 50, 50);
+    private final Color HINT_BORDER_COLOUR = new Color(42, 89, 158);
+
     /**
      * Constructor for empty black squares.
      */
@@ -67,6 +70,11 @@ public class BlackSquarePanel extends SquarePanel {
     public void deselect() {
         this.setBackground(BACKGROUND_COLOUR);
         this.setBorder(BorderFactory.createEmptyBorder());
+    }
+
+    public void hintSelect() {
+        this.setBackground(HINT_BACKGROUND_COLOUR);
+        this.setBorder(BorderFactory.createLineBorder(HINT_BORDER_COLOUR, 3));
     }
 
     @Override

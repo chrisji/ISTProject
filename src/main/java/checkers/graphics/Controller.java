@@ -4,7 +4,6 @@ import checkers.exceptions.InvalidMoveException;
 import checkers.model.Cell;
 import checkers.model.Game;
 import checkers.model.Move;
-import checkers.model.MoveChain;
 import checkers.players.AI;
 import checkers.players.AIAlphaBeta;
 import checkers.players.AIMiniMax;
@@ -28,7 +27,9 @@ public class Controller extends JFrame {
     // Views
     MainView mainView;
     BoardView boardView;
+    SettingsPanelContainer settingPanelContainer;
     PreGameSettingsView preGameSettingsView;
+    InGameSettingsPanel inGameSettingsPanel;
 
     private Game game;
     private Player redPlayer;
@@ -40,7 +41,11 @@ public class Controller extends JFrame {
     public Controller() {
         // Init views
         boardView = new BoardView();
-        preGameSettingsView = new PreGameSettingsView();
+        preGameSettingsView = new PreGameSettingsView(this);
+        inGameSettingsPanel = new InGameSettingsPanel();
+
+        settingPanelContainer = new SettingsPanelContainer(preGameSettingsView, inGameSettingsPanel);
+
         mainView = new MainView(boardView, preGameSettingsView);
 
         // JFrame properties
@@ -67,32 +72,14 @@ public class Controller extends JFrame {
     // TODO: TIDY UP
     public void updateBoard() {
         boardView.updateGrid(this);
-        boardView.revalidate();
-        mainView.revalidate();
-        this.revalidate();
-
-        mainView.repaint();
-        boardView.repaint();
-        this.repaint();
-
-        boardView.requestFocus();
-        mainView.requestFocus();
-        this.requestFocus();
+        refreshDisplay();
     }
 
     // TODO: tidy up
-    public void refreshBoard() {
-        boardView.revalidate();
-        mainView.revalidate();
-        this.revalidate();
-
+    public void refreshDisplay() {
         mainView.repaint();
         boardView.repaint();
         this.repaint();
-
-        boardView.requestFocus();
-        mainView.requestFocus();
-        this.requestFocus();
     }
 
     public boolean clickedEmptyCell(int toRow, int toCol) {
@@ -143,6 +130,12 @@ public class Controller extends JFrame {
         }
     }
 
+    public void startGame() {
+        updateBoard();
+        startTurnSequence();
+        settingPanelContainer.resetInGameSettings();
+        settingPanelContainer.showInGameSettings();
+    }
 
     public void startTurnSequence() {
         if (game.getStartingPlayer() instanceof AI) {
@@ -150,12 +143,11 @@ public class Controller extends JFrame {
         }
     }
 
-    // TODO REFACTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private void doAITurn() {
         try {
             final List<Move> moves = ((AI) game.getPlayer1()).nextMoveChain().getMoves();
 
-            final Timer thinkingTimer = new Timer(1000, new ActionListener() {
+            final Timer thinkingTimer = new Timer(200, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     doNextAIMove(moves, 0);
                 }
@@ -173,15 +165,15 @@ public class Controller extends JFrame {
         if (moveNumber < moves.size()) {
             final Move chainedMove = moves.get(moveNumber);
 
-            final Timer highlight1Timer = new Timer(1000, null);
-            final Timer highlight2Timer = new Timer(1000, null);
+            final Timer highlight1Timer = new Timer(700, null);
+            final Timer highlight2Timer = new Timer(700, null);
             final Timer moveTimer = new Timer(500, null);
 
             // Highlight the moving from square, and then move onto the next sequence of the animation
             ActionListener highlight1Listener = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     boardView.highlightSquare(chainedMove.getFromRow(), chainedMove.getFromCol());
-                    refreshBoard();
+                    refreshDisplay();
                     highlight2Timer.start();
                 }
             };
@@ -190,7 +182,7 @@ public class Controller extends JFrame {
             ActionListener highlight2Listener = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     boardView.highlightSquare(chainedMove.getToRow(), chainedMove.getToCol());
-                    refreshBoard();
+                    refreshDisplay();
                     moveTimer.start();
                 }
             };
@@ -236,8 +228,7 @@ public class Controller extends JFrame {
         Game g = new Game(minimax, human, minimax);
 
         Controller controller = new Controller();
-        controller.setGame(g);
-        controller.updateBoard();
-        controller.startTurnSequence();
+//        controller.updateBoard();
+//        controller.startTurnSequence();
     }
 }
