@@ -12,7 +12,7 @@ import java.util.List;
 public class FirstMoveAI extends AI {
 
     public FirstMoveAI(String name) {
-        super(name);
+        super(name, false);
     }
 
     public MoveChain nextMoveChain() throws InvalidMoveException {

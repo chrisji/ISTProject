@@ -40,7 +40,6 @@ public class BlackSquarePanel extends SquarePanel {
      * @param isCrowned `true` if the piece is crowned, `false` if uncrowned.
      */
     public BlackSquarePanel(boolean isBlack, boolean isCrowned) {
-        System.out.println("Adding piece to black square (BLACK=" + isBlack + ", CROWNED=" + isCrowned + ")");
         this.setBackground(BACKGROUND_COLOUR);
 
         try {

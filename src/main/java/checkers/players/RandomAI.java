@@ -15,7 +15,7 @@ public class RandomAI extends AI {
     private Random rand;
 
     public RandomAI(String name) {
-        super(name);
+        super(name, false);
         this.rand = new Random();
     }
 

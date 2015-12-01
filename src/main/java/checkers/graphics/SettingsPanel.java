@@ -19,6 +19,7 @@ public class SettingsPanel extends JPanel {
 
     public SettingsPanel(PreGameSettingsView preGameView, InGameSettingsPanel inGameView) {
         this.setOpaque(false);
+        this.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
 
         cardLayout = new CardLayout();
 

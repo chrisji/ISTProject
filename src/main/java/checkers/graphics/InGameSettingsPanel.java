@@ -1,6 +1,7 @@
 package checkers.graphics;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,10 +16,20 @@ public class InGameSettingsPanel extends JPanel {
     public InGameSettingsPanel(Controller controller) {
         this.controller = controller;
         this.setOpaque(false);
+        this.setLayout(new GridLayout(10, 1));
 
+        addTitle();
+        addBackToMainMenuButton();
+        addSpacer();
         addShowHintButton();
         addShowRulesButton();
-        addBackToMainMenuButton();
+    }
+
+    private void addTitle() {
+        JLabel titleLabel = new JLabel("                Options");
+        titleLabel.setFont(new Font("Verdana", Font.BOLD, 22));
+        titleLabel.setForeground(Color.WHITE);
+        this.add(titleLabel);
     }
 
     private void addBackToMainMenuButton() {
@@ -52,6 +63,12 @@ public class InGameSettingsPanel extends JPanel {
         });
 
         this.add(showRulesButton);
+    }
+
+    private void addSpacer(){
+        JPanel spacerPanel = new JPanel();
+        spacerPanel.setOpaque(false);
+        this.add(spacerPanel);
     }
 
     public void reset() {

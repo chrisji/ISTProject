@@ -2,29 +2,26 @@ package checkers.players;
 
 import checkers.exceptions.InvalidMoveException;
 import checkers.model.Cell;
+import checkers.model.Move;
 import checkers.model.MoveChain;
 import checkers.model.State;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author Chris Inskip
  * @version 08/10/2015
  */
-public class AIAlphaBeta extends AI {
+public class AIAlphaBetaOld extends AI {
 
-    private int depth = 8;
+    private int depth = 1;
     private static long evalCounter = 0;
-    private int difficulty = AI.DIFFICULTY_INSANE;
 
-    public AIAlphaBeta(String name) {
+    public AIAlphaBetaOld(String name) {
         super(name, true);
     }
 
-    public AIAlphaBeta(String name, int depth) {
+    public AIAlphaBetaOld(String name, int depth) {
         super(name, true);
         this.depth = depth;
     }
@@ -33,30 +30,45 @@ public class AIAlphaBeta extends AI {
         this.depth = depth;
     }
 
+    @Override
+    public void setDifficulty(int difficultyLevel) {
+
+    }
+
     public MoveChain nextMoveChain() throws InvalidMoveException {
         List<MoveChain> possibleMoveChains = getGame().getMoveChains(getGame().getGameState(), this);
-        List<Integer> scores = new ArrayList<Integer>(possibleMoveChains.size());
 
         if (!possibleMoveChains.isEmpty()) {
             // Initialise alpha and beta
             int alpha = Integer.MIN_VALUE;
             int beta = Integer.MAX_VALUE;
 
-            // Calculate scores for each move chain.
+            // Initialise best value and move chain to be the first move chain.
+            MoveChain bestChain = possibleMoveChains.remove(0);
+            State resultState = getGame().doMoveChain(getGame().getGameState(), bestChain);
+            int bestValue = alphaBeta(resultState, depth - 1, alpha, beta, getGame().incrementTurn(this));
+            System.out.println("Move Chain:" + bestChain.getMoves().toString() + " alpha-beta score: " + bestValue);
+
+            // Iterate through other possible moves and update the best move chain.
             for (MoveChain moveChain: possibleMoveChains) {
                 // Get the state from applying the move chain
-                State resultState = getGame().doMoveChain(getGame().getGameState(), moveChain);
+                resultState = getGame().doMoveChain(getGame().getGameState(), moveChain);
+
+                int prevBest = bestValue;
                 int score = alphaBeta(resultState, depth - 1, alpha, beta, getGame().incrementTurn(this));
-                scores.add(score);
+
+                // Update best value
+                bestValue = getBestValue(bestValue, score);
                 System.out.println("Move Chain:" + moveChain.getMoves().toString() + " alpha-beta score: " + score);
+
+                // If previous value is no longer the best, update best moveChain
+                if (prevBest != bestValue) {
+                    bestChain = moveChain;
+                }
             }
 
             System.out.println("ALPHA-BETA COUNT: " + evalCounter);
-
-            MoveChain selectedMoveChain = getDifficultyBasedMoveChain(possibleMoveChains, scores);
-            System.out.println("\tSelected Chain:" + selectedMoveChain.getMoves().toString());
-            return selectedMoveChain;
-
+            return bestChain;
         }
         return null; // No possible move chains
     }
@@ -71,9 +83,9 @@ public class AIAlphaBeta extends AI {
             for each child of node
                 eval = alphabeta(child, depth - 1, alpha, beta, MIN)
                 bestValue = max(bestValue, eval)
-                alpha = max(aplha, bestValue)
+                alpha := max(aplha, bestValue)
                 if alpha >= beta:
-                    break // beta cutoff
+                    // break... beta cutoff
             return bestValue
 
         if player == MIN
@@ -81,9 +93,9 @@ public class AIAlphaBeta extends AI {
             for each child of node
                 eval = alphabeta(child, depth - 1, alpha, beta,  MAX)
                 bestValue = min(bestValue, eval)
-                beta = min(beta, bestValue)
+                beta := min(beta, bestValue)
                 if alpha >= beta:
-                    break // alpha cutoff
+                    // break... alpha cutoff
             return bestValue
      */
     public int alphaBeta(State state, int depth, int alpha, int beta, Player player) {
@@ -181,72 +193,5 @@ public class AIAlphaBeta extends AI {
         } else {
             return Integer.MAX_VALUE;
         }
-    }
-
-    public MoveChain getDifficultyBasedMoveChain(List<MoveChain> moveChains, List<Integer> scores) {
-        if (moveChains.isEmpty()) {
-            return null;
-        }
-
-        // Sort the scores, so that the appropriate score for the difficulty can be selected
-        Integer[] sortedScores = new Integer[scores.size()];
-        Arrays.sort(scores.toArray(sortedScores));
-
-        boolean isMax = this == getGame().getPlayer1();
-        Random random = new Random();
-        int desiredScore = sortedScores[0];
-
-        if (difficulty == AI.DIFFICULTY_SUICIDAL) {
-            // Pick the worst score
-            if (isMax) {
-                desiredScore = sortedScores[0];
-            } else {
-                desiredScore = sortedScores[sortedScores.length-1];
-            }
-        } else if (difficulty == AI.DIFFICULTY_EASY) {
-            // Randomly pick from the worst 3 scores
-            if (isMax) {
-                desiredScore = sortedScores[random.nextInt(Math.min(3, sortedScores.length))];
-            } else {
-                desiredScore = sortedScores[sortedScores.length - (random.nextInt(Math.min(3, sortedScores.length)) + 1)];
-            }
-        } else if (difficulty == AI.DIFFICULTY_MEDIUM) {
-            // Randomly pick from the best 3 scores
-            if (isMax) {
-                desiredScore = sortedScores[sortedScores.length - (random.nextInt(Math.min(3, sortedScores.length)) + 1)];
-            } else {
-                desiredScore = sortedScores[random.nextInt(Math.min(3, sortedScores.length))];
-            }
-        } else if (difficulty == AI.DIFFICULTY_HARD) {
-            // Randomly pick from the best 2 scores
-            if (isMax) {
-                desiredScore = sortedScores[sortedScores.length - (random.nextInt(Math.min(2, sortedScores.length)) + 1)];
-            } else {
-                desiredScore = sortedScores[random.nextInt(Math.min(2, sortedScores.length))];
-            }
-        } else if (difficulty == AI.DIFFICULTY_INSANE) {
-            // Pick the best score
-            if (isMax) {
-                desiredScore = sortedScores[sortedScores.length-1];
-            } else {
-                desiredScore = sortedScores[0];
-            }
-        }
-
-        System.out.println("Desired score for difficulty=" + difficulty + " is " + desiredScore);
-
-        // Return move with desired score.
-        for (int i = 0; i < moveChains.size(); i++) {
-            if (scores.get(i) == desiredScore) {
-                return moveChains.get(i);
-            }
-        }
-
-        return null;
-    }
-
-    public void setDifficulty(int difficulty) {
-        this.setDepth(8);
-        this.difficulty = difficulty;
     }
 }
