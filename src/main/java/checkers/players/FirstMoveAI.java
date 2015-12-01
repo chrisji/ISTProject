@@ -6,11 +6,16 @@ import checkers.model.MoveChain;
 import java.util.List;
 
 /**
+ * TODO
  * @author 144158
  * @version 02/12/2015
  */
 public class FirstMoveAI extends AI {
 
+    /**
+     * TODO
+     * @param name
+     */
     public FirstMoveAI(String name) {
         super(name, false);
     }

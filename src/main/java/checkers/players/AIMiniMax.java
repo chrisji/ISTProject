@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Random;
 
 /**
+ * TODO
+ *
  * @author 144158
  * @version 02/12/2015
  */
@@ -21,15 +23,30 @@ public class AIMiniMax extends AI {
     private static long evalCounter = 0;
     private int difficulty = AI.DIFFICULTY_MEDIUM;
 
+    /**
+     * TODO
+     *
+     * @param name
+     */
     public AIMiniMax(String name) {
         super(name, true);
     }
 
+    /**
+     * TODO
+     *
+     * @param name
+     * @param depth
+     */
     public AIMiniMax(String name, int depth) {
         super(name, true);
         this.depth = depth;
     }
 
+    /**
+     * TODO
+     * @param depth
+     */
     public void setDepth(int depth) {
         this.depth = depth;
     }
@@ -60,6 +77,9 @@ public class AIMiniMax extends AI {
     }
 
     /**
+     *
+     * TODO
+     *
      function minimax(node, depth, player)
         if depth == 0 or node == leaf
             return the value of node
@@ -117,6 +137,11 @@ public class AIMiniMax extends AI {
         }
     }
 
+    /**
+     * TODO
+     * @param s
+     * @return
+     */
     private int evaluateState(State s) {
         Cell[][] board = s.getBoard();
 
@@ -142,6 +167,13 @@ public class AIMiniMax extends AI {
         return score;
     }
 
+    /**
+     * TODO
+     *
+     * @param value1
+     * @param value2
+     * @return
+     */
     public int getBestValue(int value1, int value2) {
         boolean isMax = this == getGame().getPlayer1();
 
@@ -152,6 +184,11 @@ public class AIMiniMax extends AI {
         }
     }
 
+    /**
+     * TODO
+     *
+     * @return
+     */
     public int getWorstValue() {
         boolean isMax = this == getGame().getPlayer1();
 
@@ -162,6 +199,13 @@ public class AIMiniMax extends AI {
         }
     }
 
+    /**
+     * TODO
+     *
+     * @param moveChains
+     * @param scores
+     * @return
+     */
     public MoveChain getDifficultyBasedMoveChain(List<MoveChain> moveChains, List<Integer> scores) {
         if (moveChains.isEmpty()) {
             return null;

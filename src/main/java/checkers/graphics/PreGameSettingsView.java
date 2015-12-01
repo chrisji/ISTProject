@@ -3,20 +3,14 @@ package checkers.graphics;
 import checkers.model.Game;
 import checkers.model.PlayerFactory;
 import checkers.players.AI;
-import checkers.players.AIAlphaBeta;
-import checkers.players.AIMiniMax;
-import checkers.players.FirstMoveAI;
 import checkers.players.Player;
-import checkers.players.RandomAI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

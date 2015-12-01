@@ -18,6 +18,8 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
+ * TODO
+ *
  * @author 144158
  * @version 02/12/2015
  */
@@ -38,6 +40,9 @@ public class Controller extends JFrame {
     private int fromRow = -1;
     private int fromCol = -1;
 
+    /**
+     * TODO
+     */
     public Controller() {
         // Init views
         boardView = new BoardView();
@@ -53,23 +58,41 @@ public class Controller extends JFrame {
         this.setVisible(true);
     }
 
+    /**
+     * TODO
+     * @param game
+     */
     public void setGame(Game game) {
         this.game = game;
     }
 
+    /**
+     * TODO
+     * @return
+     */
     public Game getGame() {
         return this.game;
     }
 
+    /**
+     * TODO
+     * @return
+     */
     public Player getBlackPlayer() {
         return game.getStartingPlayer();
     }
 
+    /**
+     * TODO
+     */
     public void updateBoard() {
         boardView.updateGrid(this);
         refreshDisplay();
     }
 
+    /**
+     * TODO
+     */
     public void refreshDisplay() {
         mainView.repaint();
         boardView.repaint();
@@ -82,6 +105,13 @@ public class Controller extends JFrame {
         this.revalidate();
     }
 
+    /**
+     * TODO
+     *
+     * @param toRow
+     * @param toCol
+     * @return
+     */
     public boolean clickedEmptyCell(int toRow, int toCol) {
         if (moveInProgress) {
             Player currentPlayer = game.getGameState().getTurn();
@@ -108,6 +138,13 @@ public class Controller extends JFrame {
         return true;
     }
 
+    /**
+     * TODO
+     *
+     * @param fromRow
+     * @param fromCol
+     * @return
+     */
     public boolean clickedOccupiedCell(int fromRow, int fromCol) {
         // Get the underlying cell that has been clicked.
         Cell clickedCell = game.getGameState().getBoard()[fromRow][fromCol];
@@ -127,6 +164,9 @@ public class Controller extends JFrame {
         }
     }
 
+    /**
+     * TODO
+     */
     public void startGame() {
         settingsPanel.resetInGameSettings();
         settingsPanel.showInGameSettings();
@@ -134,6 +174,9 @@ public class Controller extends JFrame {
         doNextTurn();
     }
 
+    /**
+     * TODO
+     */
     public void showHint() {
         try {
             List<MoveChain> moveChains = game.getMoveChains(game.getGameState(), game.getGameState().getTurn());
@@ -146,6 +189,9 @@ public class Controller extends JFrame {
         }
     }
 
+    /**
+     * TODO
+     */
     public void showWinner() {
         String winner = "Red wins!";
         if (game.getWinner(game.getGameState()) == game.getStartingPlayer()) {
@@ -156,6 +202,9 @@ public class Controller extends JFrame {
         JOptionPane.showMessageDialog(this, winner, "Game Over", JOptionPane.PLAIN_MESSAGE);
     }
 
+    /**
+     * TODO
+     */
     public void gotoMainMenu() {
         moveInProgress = false;
         quitGameRequest = false;
@@ -166,6 +215,9 @@ public class Controller extends JFrame {
         refreshDisplay();
     }
 
+    /**
+     * TODO
+     */
     public void requestMainMenu() {
         if (!game.hasWinner(game.getGameState()) && game.getGameState().getTurn() instanceof AI) {
             quitGameRequest = true;
@@ -174,6 +226,9 @@ public class Controller extends JFrame {
         }
     }
 
+    /**
+     * TODO
+     */
     public void doNextTurn() {
         if (!quitGameRequest) {
             if (game.hasWinner(game.getGameState())) {
@@ -195,6 +250,9 @@ public class Controller extends JFrame {
         }
     }
 
+    /**
+     * TODO
+     */
     public void showRules() {
         StringBuilder builder = new StringBuilder();
         try {
@@ -226,6 +284,10 @@ public class Controller extends JFrame {
         popUp.setVisible(true);
     }
 
+    /**
+     * TODO
+     * @param ai
+     */
     private void doAITurn(AI ai) {
         try {
             final List<Move> moves = ai.nextMoveChain().getMoves();
@@ -242,6 +304,11 @@ public class Controller extends JFrame {
         }
     }
 
+    /**
+     * TODO
+     * @param moves
+     * @param moveNumber
+     */
     private void doNextAIMove(final List<Move> moves, final int moveNumber) {
         if (quitGameRequest) {
             gotoMainMenu();
@@ -301,6 +368,10 @@ public class Controller extends JFrame {
         }
     }
 
+    /**
+     * TODO
+     * @param args
+     */
     public static void main(String[] args) {
         new Controller();
     }

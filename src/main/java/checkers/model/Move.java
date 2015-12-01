@@ -16,6 +16,14 @@ public class Move {
     private final int toRow;
     private final int toCol;
 
+    /**
+     * TODO
+     *
+     * @param fromRow
+     * @param fromCol
+     * @param toRow
+     * @param toCol
+     */
     public Move(int fromRow, int fromCol, int toRow, int toCol) {
         this.fromRow = fromRow;
         this.fromCol = fromCol;

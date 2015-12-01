@@ -3,6 +3,7 @@ package checkers.model;
 import checkers.exceptions.InvalidMoveException;
 
 /**
+ * TODO
  * @author 144158
  * @version 02/12/2015
  */
@@ -12,6 +13,15 @@ public class MoveFactory {
     private static Move[][][][] moves = new Move[8][8][8][8];
 
     // Used to keep references to the same move, to save memory.
+    /**
+     * TODO
+     * @param fromRow
+     * @param fromCol
+     * @param toRow
+     * @param toCol
+     * @return
+     * @throws InvalidMoveException
+     */
     public static Move buildMove(int fromRow, int fromCol, int toRow, int toCol) throws InvalidMoveException {
         if (fromRow > moves.length || fromCol > moves[0].length) {
             throw new InvalidMoveException("Attempting to move from out of bound location");

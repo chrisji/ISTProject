@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * TODO
+ *
  * @author 144158
  * @version 02/12/2015
  */
@@ -21,6 +23,13 @@ public class Game {
     private Player winner;
     private Player startingPlayer;
 
+    /**
+     * TODO
+     *
+     * @param player1
+     * @param player2
+     * @param startingPlayer
+     */
     public Game(Player player1, Player player2, Player startingPlayer) {
         this.player1 = player1;
         this.player2 = player2;
@@ -34,6 +43,12 @@ public class Game {
         gameState = new State(board, startingPlayer, null);
     }
 
+    /**
+     * TODO
+     *
+     * @param player
+     * @return
+     */
     public Player incrementTurn(Player player) {
         return player == player1 ? player2 : player1;
     }
@@ -66,6 +81,14 @@ public class Game {
         return null; // No player has won.
     }
 
+    /**
+     * TODO
+     *
+     * @param currentState
+     * @param move
+     * @return
+     * @throws InvalidMoveException
+     */
     public State movePiece(State currentState, Move move) throws InvalidMoveException {
         Player player = currentState.getTurn();
 
@@ -117,10 +140,28 @@ public class Game {
         return currentState;
     }
 
+    /**
+     * TODO
+     *
+     * @param state
+     * @param player
+     * @return
+     * @throws InvalidMoveException
+     */
     public List<MoveChain> getMoveChains(State state, Player player) throws InvalidMoveException {
         return getMoveChainsHelper(state, player, new ArrayList<MoveChain>(), new MoveChain());
     }
 
+    /**
+     * TODO
+     *
+     * @param state
+     * @param player
+     * @param moveChains
+     * @param moveChain
+     * @return
+     * @throws InvalidMoveException
+     */
     private List<MoveChain> getMoveChainsHelper(State state, Player player, List<MoveChain> moveChains, MoveChain moveChain) throws InvalidMoveException {
         if (player != state.getTurn()) {
             return moveChains;
@@ -137,7 +178,6 @@ public class Game {
             if (nextState.getTurn() != player) {
                 // End of move chaining
                 moveChains.add(clonedMoveChain);
-//                System.out.println(clonedMoveChain.getMoves());
             } else {
                 // Moves still available to chain together
                 getMoveChainsHelper(nextState, player, moveChains, clonedMoveChain);
@@ -147,6 +187,12 @@ public class Game {
         return moveChains;
     }
 
+    /**
+     * TODO
+     *
+     * @param state
+     * @return
+     */
     public List<Move> getValidMoves(State state) {
         if (state.getTurn() == player1) {
             return getValidPlayer1Moves(state);
@@ -155,7 +201,12 @@ public class Game {
         }
     }
 
-    // TODO: Do some refactoring to merge player1 and player2 checks.
+    /**
+     * TODO
+     *
+     * @param state
+     * @return
+     */
     public List<Move> getValidPlayer1Moves(State state) {
         Cell[][] board = state.getBoard();
         Piece currentPiece = state.getCurrentPiece();
@@ -239,6 +290,12 @@ public class Game {
         return nonCapturingMoves;
     }
 
+    /**
+     * TODO
+     *
+     * @param state
+     * @return
+     */
     public List<Move> getValidPlayer2Moves(State state) {
         Cell[][] board = state.getBoard();
         Piece currentPiece = state.getCurrentPiece();
@@ -323,6 +380,14 @@ public class Game {
         return nonCapturingMoves;
     }
 
+    /**
+     * TODO
+     *
+     * @param state
+     * @param player
+     * @param move
+     * @throws InvalidMoveException
+     */
     private void validateMove(State state, Player player, Move move) throws InvalidMoveException {
         Player currentTurn = state.getTurn();
 
@@ -387,6 +452,13 @@ public class Game {
         }
     }
 
+    /**
+     * TODO
+     *
+     * @param player
+     * @param move
+     * @return
+     */
     private boolean isCrowningMove(Player player, Move move) {
         // Check if player 1 piece has reached the 'bottom' of the board
         if (player == player1 && move.getToRow() == 7) {
@@ -401,26 +473,54 @@ public class Game {
         return false;
     }
 
+    /**
+     * TODO
+     *
+     * @param fromState
+     * @param toState
+     * @return
+     */
     public boolean hasChangedPlayer(State fromState, State toState) {
         return fromState.getTurn().equals(toState.getTurn());
     }
 
+    /**
+     * TODO
+     * @return
+     */
     public State getGameState() {
         return this.gameState;
     }
 
+    /**
+     * TODO
+     * @param state
+     */
     public void setGameState(State state) {
         this.gameState = state;
     }
 
+    /**
+     * TODO
+     * @return
+     */
     public Player getPlayer1() {
         return this.player1;
     }
 
+    /**
+     * TODO
+     * @return
+     */
     public Player getPlayer2() {
         return this.player2;
     }
 
+    /**
+     * TODO
+     *
+     * @return
+     */
     public Player getStartingPlayer() {
         return this.startingPlayer;
     }

@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
+ * TODO
  * @author 144158
  * @version 02/12/2015
  */
@@ -78,12 +79,19 @@ public class BlackSquarePanel extends SquarePanel {
         }
     }
 
+    /**
+     * TODO
+     */
     public void hintSelect() {
         this.hinted = true;
         this.setBackground(HINT_BACKGROUND_COLOUR);
         this.setBorder(BorderFactory.createLineBorder(HINT_BORDER_COLOUR, 3));
     }
 
+    /**
+     * TODO
+     * @param g
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

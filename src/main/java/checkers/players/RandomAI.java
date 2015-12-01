@@ -14,11 +14,20 @@ public class RandomAI extends AI {
 
     private Random rand;
 
+    /**
+     * TODO
+     * @param name
+     */
     public RandomAI(String name) {
         super(name, false);
         this.rand = new Random();
     }
 
+    /**
+     * TODO
+     * @return
+     * @throws InvalidMoveException
+     */
     public MoveChain nextMoveChain() throws InvalidMoveException {
         List<MoveChain> moveChains = getGame().getMoveChains(getGame().getGameState(), this);
 

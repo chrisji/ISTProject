@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
+ * TODO
+ *
  * @author 144158
  * @version 02/12/2015
  */
@@ -14,6 +16,10 @@ public class InGameSettingsPanel extends JPanel {
     private Controller controller;
     private JTextArea messageArea;
 
+    /**
+     * TODO
+     * @param controller
+     */
     public InGameSettingsPanel(Controller controller) {
         this.controller = controller;
         this.setOpaque(false);
@@ -30,6 +36,9 @@ public class InGameSettingsPanel extends JPanel {
         addShowRulesButton();
     }
 
+    /**
+     * TODO
+     */
     private void addTitle() {
         JLabel titleLabel = new JLabel("                Options");
         titleLabel.setFont(new Font("Verdana", Font.BOLD, 22));
@@ -37,6 +46,9 @@ public class InGameSettingsPanel extends JPanel {
         this.add(titleLabel);
     }
 
+    /**
+     * TODO
+     */
     private void addBackToMainMenuButton() {
         JButton mainMenuButton = new JButton("New Game");
         mainMenuButton.addActionListener(new ActionListener() {
@@ -48,6 +60,9 @@ public class InGameSettingsPanel extends JPanel {
         this.add(mainMenuButton);
     }
 
+    /**
+     * TODO
+     */
     private void addShowHintButton() {
         JButton showHintButton = new JButton("Show Help");
         showHintButton.addActionListener(new ActionListener() {
@@ -59,6 +74,9 @@ public class InGameSettingsPanel extends JPanel {
         this.add(showHintButton);
     }
 
+    /**
+     * TODO
+     */
     private void addShowRulesButton() {
         JButton showRulesButton = new JButton("Show Rules");
         showRulesButton.addActionListener(new ActionListener() {
@@ -70,6 +88,9 @@ public class InGameSettingsPanel extends JPanel {
         this.add(showRulesButton);
     }
 
+    /**
+     * TODO
+     */
     private void addMessagePanel() {
         JLabel titleLabel = new JLabel("              Messages");
         titleLabel.setFont(new Font("Verdana", Font.BOLD, 22));
@@ -86,12 +107,12 @@ public class InGameSettingsPanel extends JPanel {
         this.add(messageArea);
     }
 
+    /**
+     * TODO
+     * @param messages
+     */
     public void setMessages(String... messages) {
         StringBuilder stringBuilder = new StringBuilder();
-
-        if (messages.length < 1) {
-            stringBuilder.append(" • N/A");
-        }
 
         for (String message : messages) {
             stringBuilder.append(" • ");
@@ -102,12 +123,18 @@ public class InGameSettingsPanel extends JPanel {
         messageArea.setText(stringBuilder.toString());
     }
 
+    /**
+     * TODO
+     */
     private void addSpacer() {
         JPanel spacerPanel = new JPanel();
         spacerPanel.setOpaque(false);
         this.add(spacerPanel);
     }
 
+    /**
+     * TODO
+     */
     public void reset() {
         messageArea.setText("");
     }

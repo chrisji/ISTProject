@@ -8,6 +8,14 @@ import checkers.players.Player;
  */
 public class Utils {
 
+    /**
+     * TODO
+     * @param rows
+     * @param cols
+     * @param player1
+     * @param player2
+     * @return
+     */
     public static Cell[][] generateInitialBoard(int rows, int cols, Player player1, Player player2) {
         Cell[][] board = new Cell[rows][cols];
 
@@ -58,6 +66,12 @@ public class Utils {
         return board;
     }
 
+    /**
+     * TODO
+     *
+     * @param board
+     * @return
+     */
     public static Cell[][] cloneBoard(Cell[][] board) {
         int rows = board.length;
         int cols = board[0].length;

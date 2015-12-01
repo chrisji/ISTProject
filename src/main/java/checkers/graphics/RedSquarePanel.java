@@ -3,6 +3,8 @@ package checkers.graphics;
 import java.awt.*;
 
 /**
+ * TODO
+ *
  * @author 144158
  * @version 02/12/2015
  */

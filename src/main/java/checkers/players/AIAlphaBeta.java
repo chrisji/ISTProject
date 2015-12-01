@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
+ * TODO
  * @author 144158
  * @version 02/12/2015
  */
@@ -20,19 +21,37 @@ public class AIAlphaBeta extends AI {
     private static long evalCounter = 0;
     private int difficulty = AI.DIFFICULTY_INSANE;
 
+    /**
+     * TODO
+     * @param name
+     */
     public AIAlphaBeta(String name) {
         super(name, true);
     }
 
+    /**
+     * TODO
+     * @param name
+     * @param depth
+     */
     public AIAlphaBeta(String name, int depth) {
         super(name, true);
         this.depth = depth;
     }
 
+    /**
+     * TODO
+     * @param depth
+     */
     public void setDepth(int depth) {
         this.depth = depth;
     }
 
+    /**
+     * TODO
+     * @return
+     * @throws InvalidMoveException
+     */
     public MoveChain nextMoveChain() throws InvalidMoveException {
         List<MoveChain> possibleMoveChains = getGame().getMoveChains(getGame().getGameState(), this);
         List<Integer> scores = new ArrayList<Integer>(possibleMoveChains.size());
@@ -62,6 +81,7 @@ public class AIAlphaBeta extends AI {
     }
 
     /**
+     * TODO
      function alphabeta(node, depth, alpha, beta, player)
         if depth == 0 or node == leaf
             return the value of node
@@ -136,6 +156,11 @@ public class AIAlphaBeta extends AI {
         }
     }
 
+    /**
+     * TODO
+     * @param s
+     * @return
+     */
     private int evaluateState(State s) {
         Cell[][] board = s.getBoard();
 
@@ -172,6 +197,11 @@ public class AIAlphaBeta extends AI {
         }
     }
 
+    /**
+     * TODO
+     *
+     * @return
+     */
     public int getWorstValue() {
         // Check to see if this player is the game's player 1, and therefore 'MAX'.
         boolean isMax = this == getGame().getPlayer1();
@@ -183,6 +213,13 @@ public class AIAlphaBeta extends AI {
         }
     }
 
+    /**
+     * TODO
+     *
+     * @param moveChains
+     * @param scores
+     * @return
+     */
     public MoveChain getDifficultyBasedMoveChain(List<MoveChain> moveChains, List<Integer> scores) {
         if (moveChains.isEmpty()) {
             return null;

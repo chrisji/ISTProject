@@ -7,6 +7,7 @@ import checkers.players.Player;
 import checkers.players.RandomAI;
 
 /**
+ * TODO
  * @author 144158
  * @version 02/12/2015
  */
@@ -18,6 +19,13 @@ public class PlayerFactory {
     public static final int FIRST_MOVE_AI = 3;
     public static final int RANDOM_MOVE_AI = 4;
 
+    /**
+     * TODO
+     *
+     * @param player
+     * @param name
+     * @return
+     */
     public static Player buildPlayer(int player, String name) {
         if (player == HUMAN) {
             return new Player(name);

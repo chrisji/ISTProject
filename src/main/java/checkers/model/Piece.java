@@ -15,18 +15,32 @@ public class Piece implements Cloneable {
         this.player = player;
     }
 
+    /**
+     * TODO
+     */
     public void crown() {
         this.crowned = true;
     }
 
+    /**
+     * TODO
+     * @return
+     */
     public boolean isCrowned() {
         return this.crowned;
     }
 
+    /**
+     * TODO
+     * @return
+     */
     public Player getPlayer() {
         return this.player;
     }
 
+    /**
+     * TODO
+     */
     @Override
     public String toString() {
         String pieceInitial = getPlayer().getName().substring(0, 1);
@@ -38,6 +52,11 @@ public class Piece implements Cloneable {
         }
     }
 
+    /**
+     * TODO
+     * @return
+     * @throws CloneNotSupportedException
+     */
     @Override
     protected Piece clone() throws CloneNotSupportedException {
         Piece p = new Piece(player);

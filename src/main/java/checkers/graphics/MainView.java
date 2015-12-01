@@ -4,11 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
+ * TODO
+ *
  * @author 144158
  * @version 02/12/2015
  */
 public class MainView extends JPanel {
 
+    /**
+     * TODO
+     *
+     * @param boardView
+     * @param settingsPanel
+     */
     public MainView(BoardView boardView, SettingsPanel settingsPanel) {
         this.setBackground(new Color(70, 50, 22));
         this.setLayout(new BorderLayout());

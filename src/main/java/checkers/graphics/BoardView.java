@@ -12,6 +12,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
+ * TODO
+ *
  * @author 144158
  * @version 02/12/2015
  */
@@ -24,6 +26,9 @@ public class BoardView extends JPanel {
     private static final int BOARD_WIDTH = 500;
     private static final int BOARD_HEIGHT = 500;
 
+    /**
+     * TODO
+     */
     public BoardView() {
         this.setSize(BOARD_WIDTH, BOARD_HEIGHT);
 
@@ -39,6 +44,9 @@ public class BoardView extends JPanel {
         initEmptyBoard();
     }
 
+    /**
+     * TODO
+     */
     public void initEmptyBoard() {
         // Reset grid layout
         this.removeAll();
@@ -59,6 +67,10 @@ public class BoardView extends JPanel {
         this.revalidate();
     }
 
+    /**
+     * TODO
+     * @param controller
+     */
     public void updateGrid(final Controller controller) {
         this.removeAll();
 
@@ -130,6 +142,11 @@ public class BoardView extends JPanel {
         this.revalidate();
     }
 
+    /**
+     * TODO
+     * @param row
+     * @param col
+     */
     private void selectPanel(int row, int col) {
         if (isBlackSquarePosition(row, col)) {
             // Deselect previously selected square
@@ -148,12 +165,22 @@ public class BoardView extends JPanel {
         }
     }
 
+    /**
+     * TODO
+     * @param row
+     * @param col
+     */
     private void deselectPanel(int row, int col) {
         if (isBlackSquarePosition(row, col) && selectedPanel != null) {
             selectedPanel.deselect();
         }
     }
 
+    /**
+     * TODO
+     * @param row
+     * @param col
+     */
     public void highlightSquare(int row, int col) {
         try {
             // Select square at the given position
@@ -165,6 +192,11 @@ public class BoardView extends JPanel {
         }
     }
 
+    /**
+     * TODO
+     * @param row
+     * @param col
+     */
     public void hintSelectSquare(int row, int col) {
         try {
             // Select square at the given position
