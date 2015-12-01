@@ -18,7 +18,10 @@ public class MainView extends JPanel {
      * @param settingsPanel
      */
     public MainView(BoardView boardView, SettingsPanel settingsPanel) {
-        this.setBackground(new Color(70, 50, 22));
+//        this.setBackground(new Color(70, 50, 22));
+//        this.setBackground(new Color(24, 64, 18));
+        this.setBackground(new Color(73, 73, 73));
+
         this.setLayout(new BorderLayout());
 
         JLabel titleLabel = new JLabel("IST Checkers");
