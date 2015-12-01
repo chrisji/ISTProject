@@ -17,6 +17,7 @@ public class InGameSettingsPanel extends JPanel {
         this.setOpaque(false);
 
         addShowHintButton();
+        addShowRulesButton();
         addBackToMainMenuButton();
     }
 
@@ -32,7 +33,7 @@ public class InGameSettingsPanel extends JPanel {
     }
 
     private void addShowHintButton() {
-        JButton showHintButton = new JButton("Get Hint");
+        JButton showHintButton = new JButton("Show Help");
         showHintButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 controller.showHint();
@@ -40,6 +41,17 @@ public class InGameSettingsPanel extends JPanel {
         });
 
         this.add(showHintButton);
+    }
+
+    private void addShowRulesButton() {
+        JButton showRulesButton = new JButton("Show Rules");
+        showRulesButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                controller.showRules();
+            }
+        });
+
+        this.add(showRulesButton);
     }
 
     public void reset() {

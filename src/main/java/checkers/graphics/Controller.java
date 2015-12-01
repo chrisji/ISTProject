@@ -12,9 +12,19 @@ import checkers.players.FirstMoveAI;
 import checkers.players.Player;
 import checkers.players.RandomAI;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -75,6 +85,7 @@ public class Controller extends JFrame {
     public void refreshDisplay() {
         mainView.repaint();
         boardView.repaint();
+        settingsPanel.repaint();
         this.repaint();
     }
 
@@ -95,9 +106,8 @@ public class Controller extends JFrame {
                 updateBoard();
                 System.out.println("\t...move successful! (" + fromRow + ", " + fromCol + ") to (" + toRow + ", " + toCol + ")");
 
-                // TODO refactor...
-                if (currentPlayer != game.getGameState().getTurn() && game.getGameState().getTurn() instanceof AI) {
-                    doAITurn((AI) game.getGameState().getTurn());
+                if (currentPlayer != game.getGameState().getTurn()) {
+                    doNextTurn();
                 }
             } catch (InvalidMoveException e) {
                 e.printStackTrace();
@@ -150,6 +160,15 @@ public class Controller extends JFrame {
         }
     }
 
+    public void showWinner() {
+        String winner = "Red wins!";
+        if (game.getWinner(game.getGameState()) == game.getStartingPlayer()) {
+            winner = "Black wins!";
+        }
+
+        JOptionPane.showMessageDialog(this, winner, "Game Over", JOptionPane.NO_OPTION);
+    }
+
     public void gotoMainMenu() {
         moveInProgress = false;
         quitGameRequest = false;
@@ -161,7 +180,7 @@ public class Controller extends JFrame {
     }
 
     public void requestMainMenu() {
-        if (game.getGameState().getTurn() instanceof AI) {
+        if (!game.hasWinner(game.getGameState()) && game.getGameState().getTurn() instanceof AI) {
             quitGameRequest = true;
         } else {
             gotoMainMenu();
@@ -170,11 +189,46 @@ public class Controller extends JFrame {
 
     public void doNextTurn() {
         if (!quitGameRequest) {
-            Player currentPlayer = game.getGameState().getTurn();
-            if (currentPlayer instanceof AI) {
-                doAITurn((AI) currentPlayer);
+            if (game.hasWinner(game.getGameState())) {
+                showWinner();
+                moveInProgress = false;
+            } else {
+                Player currentPlayer = game.getGameState().getTurn();
+                if (currentPlayer instanceof AI) {
+                    doAITurn((AI) currentPlayer);
+                }
             }
         }
+    }
+
+    public void showRules() {
+        StringBuilder builder = new StringBuilder();
+        try {
+            for (String line : Files.readAllLines(Paths.get("res/rules.txt"))) {
+                builder.append(line + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        JTextArea textArea = new JTextArea(builder.toString());
+        textArea.setFont(new Font(Font.MONOSPACED,Font.PLAIN, 12));
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setEditable(false);
+        textArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setSize(450, 600);
+
+        JDialog popUp = new JDialog();
+        popUp.setSize(450, 600);
+        popUp.add(scrollPane);
+        popUp.setResizable(false);
+        popUp.setLocationRelativeTo(this);
+
+        popUp.setVisible(true);
     }
 
     private void doAITurn(AI ai) {
