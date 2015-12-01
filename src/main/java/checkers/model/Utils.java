@@ -4,7 +4,7 @@ import checkers.players.Player;
 
 /**
  * @author 144158
- * @version 29/10/2015
+ * @version 02/12/2015
  */
 public class Utils {
 

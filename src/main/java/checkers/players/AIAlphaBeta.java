@@ -12,7 +12,7 @@ import java.util.Random;
 
 /**
  * @author 144158
- * @version 08/10/2015
+ * @version 02/12/2015
  */
 public class AIAlphaBeta extends AI {
 

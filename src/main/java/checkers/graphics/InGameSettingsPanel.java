@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 
 /**
  * @author 144158
- * @version 28/11/2015
+ * @version 02/12/2015
  */
 public class InGameSettingsPanel extends JPanel {
 

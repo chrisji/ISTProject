@@ -5,7 +5,7 @@ import java.awt.*;
 
 /**
  * @author 144158
- * @version 30/11/2015
+ * @version 02/12/2015
  */
 public class SettingsPanel extends JPanel {
 

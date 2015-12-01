@@ -4,7 +4,7 @@ import checkers.exceptions.InvalidMoveException;
 
 /**
  * @author 144158
- * @version 01/11/2015
+ * @version 02/12/2015
  */
 public class MoveFactory {
 
