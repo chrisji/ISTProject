@@ -7,7 +7,7 @@ import checkers.players.Player;
 import checkers.players.RandomAI;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 30/11/2015
  */
 public class PlayerFactory {

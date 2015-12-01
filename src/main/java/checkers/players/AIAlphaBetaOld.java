@@ -9,7 +9,7 @@ import checkers.model.State;
 import java.util.List;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 08/10/2015
  */
 public class AIAlphaBetaOld extends AI {

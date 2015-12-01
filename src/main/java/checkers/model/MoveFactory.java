@@ -3,7 +3,7 @@ package checkers.model;
 import checkers.exceptions.InvalidMoveException;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 01/11/2015
  */
 public class MoveFactory {

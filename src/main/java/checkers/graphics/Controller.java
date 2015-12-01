@@ -6,29 +6,19 @@ import checkers.model.Game;
 import checkers.model.Move;
 import checkers.model.MoveChain;
 import checkers.players.AI;
-import checkers.players.AIAlphaBeta;
-import checkers.players.AIMiniMax;
-import checkers.players.FirstMoveAI;
 import checkers.players.Player;
-import checkers.players.RandomAI;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 26/11/2015
  */
 public class Controller extends JFrame {
@@ -75,26 +65,25 @@ public class Controller extends JFrame {
         return game.getStartingPlayer();
     }
 
-    // TODO: TIDY UP
     public void updateBoard() {
         boardView.updateGrid(this);
         refreshDisplay();
     }
 
-    // TODO: tidy up
     public void refreshDisplay() {
         mainView.repaint();
         boardView.repaint();
         settingsPanel.repaint();
         this.repaint();
+
+        mainView.revalidate();
+        boardView.revalidate();
+        settingsPanel.revalidate();
+        this.revalidate();
     }
 
     public boolean clickedEmptyCell(int toRow, int toCol) {
-        System.out.println("Clicked empty cell (" + toRow + ", " + toCol + ")");
-
         if (moveInProgress) {
-            System.out.println("\t...and move was in progress");
-
             Player currentPlayer = game.getGameState().getTurn();
 
             try {
@@ -104,15 +93,14 @@ public class Controller extends JFrame {
                 // Attempt to apply the move
                 game.setGameState(game.movePiece(game.getGameState(), move));
                 updateBoard();
-                System.out.println("\t...move successful! (" + fromRow + ", " + fromCol + ") to (" + toRow + ", " + toCol + ")");
+                settingsPanel.setMessages();
 
                 if (currentPlayer != game.getGameState().getTurn()) {
                     doNextTurn();
                 }
             } catch (InvalidMoveException e) {
+                settingsPanel.setMessages(e.getMessage());
                 e.printStackTrace();
-                // Invalid move, tell the main view
-                // TODO
                 return false;
             }
         }
@@ -121,8 +109,6 @@ public class Controller extends JFrame {
     }
 
     public boolean clickedOccupiedCell(int fromRow, int fromCol) {
-        System.out.println("Clicked occupied cell (" + fromRow + ", " + fromCol + ")");
-
         // Get the underlying cell that has been clicked.
         Cell clickedCell = game.getGameState().getBoard()[fromRow][fromCol];
 
@@ -142,10 +128,10 @@ public class Controller extends JFrame {
     }
 
     public void startGame() {
-        updateBoard();
-        doNextTurn();
         settingsPanel.resetInGameSettings();
         settingsPanel.showInGameSettings();
+        updateBoard();
+        doNextTurn();
     }
 
     public void showHint() {
@@ -156,7 +142,7 @@ public class Controller extends JFrame {
                 boardView.hintSelectSquare(firstMove.getFromRow(), firstMove.getFromCol());
             }
         } catch (InvalidMoveException e) {
-            // Shouldn't happen
+            // Shouldn't happen!
         }
     }
 
@@ -166,7 +152,8 @@ public class Controller extends JFrame {
             winner = "Black wins!";
         }
 
-        JOptionPane.showMessageDialog(this, winner, "Game Over", JOptionPane.NO_OPTION);
+        settingsPanel.setMessages(winner);
+        JOptionPane.showMessageDialog(this, winner, "Game Over", JOptionPane.PLAIN_MESSAGE);
     }
 
     public void gotoMainMenu() {
@@ -194,6 +181,13 @@ public class Controller extends JFrame {
                 moveInProgress = false;
             } else {
                 Player currentPlayer = game.getGameState().getTurn();
+
+                if (currentPlayer == getGame().getStartingPlayer()) {
+                    settingsPanel.setMessages("Black's turn");
+                } else {
+                    settingsPanel.setMessages("Red's turn");
+                }
+
                 if (currentPlayer instanceof AI) {
                     doAITurn((AI) currentPlayer);
                 }
@@ -205,7 +199,8 @@ public class Controller extends JFrame {
         StringBuilder builder = new StringBuilder();
         try {
             for (String line : Files.readAllLines(Paths.get("res/rules.txt"))) {
-                builder.append(line + "\n");
+                builder.append(line);
+                builder.append("\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -243,7 +238,7 @@ public class Controller extends JFrame {
             thinkingTimer.setRepeats(false);
             thinkingTimer.start();
         } catch (InvalidMoveException e) {
-            e.printStackTrace();
+            // Shouldn't happen!
         }
     }
 
@@ -285,6 +280,7 @@ public class Controller extends JFrame {
                         updateBoard();
                         doNextAIMove(moves, moveNumber + 1);
                     } catch (InvalidMoveException me) {
+                        settingsPanel.setMessages(me.getMessage());
                         me.printStackTrace();
                     }
                 }
@@ -306,19 +302,6 @@ public class Controller extends JFrame {
     }
 
     public static void main(String[] args) {
-        // Example game config
-        AI firstAI = new FirstMoveAI("AI");
-        AI minimax = new AIMiniMax("MM", 5);
-        AI alphaBeta = new AIAlphaBeta("AB", 5);
-        AI randAI = new RandomAI("Rand_AI");
-
-        Player human = new Player("HUMAN");
-        Player human2 = new Player("HUMAN");
-
-        Game g = new Game(minimax, human, minimax);
-
-        Controller controller = new Controller();
-//        controller.updateBoard();
-//        controller.startTurnSequence();
+        new Controller();
     }
 }

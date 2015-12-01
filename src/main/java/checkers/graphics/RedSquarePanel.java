@@ -3,12 +3,12 @@ package checkers.graphics;
 import java.awt.*;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 28/11/2015
  */
-public class RedSqaurePanel extends SquarePanel {
+public class RedSquarePanel extends SquarePanel {
 
-    public RedSqaurePanel() {
+    public RedSquarePanel() {
         this.setBackground(new Color(150, 0, 0));
     }
 }

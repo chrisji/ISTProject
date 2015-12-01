@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 30/11/2015
  */
 public class SettingsPanel extends JPanel {
@@ -45,6 +45,10 @@ public class SettingsPanel extends JPanel {
 
     public void showPreGameSettings() {
         cardLayout.show(this, PRE_GAME_SETTINGS_NAME);
+    }
+
+    public void setMessages(String... messages) {
+        inGameSettingsPanel.setMessages(messages);
     }
 
 }

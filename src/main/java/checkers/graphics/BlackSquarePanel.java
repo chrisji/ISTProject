@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 28/11/2015
  */
 public class BlackSquarePanel extends SquarePanel {

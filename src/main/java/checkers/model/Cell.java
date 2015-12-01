@@ -1,7 +1,7 @@
 package checkers.model;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 03/10/2015
  */
 public class Cell implements Cloneable {

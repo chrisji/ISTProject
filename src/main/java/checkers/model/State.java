@@ -3,7 +3,7 @@ package checkers.model;
 import checkers.players.Player;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 29/10/2015
  */
 public class State {

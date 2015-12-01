@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 08/10/2015
  */
 public class AIAlphaBeta extends AI {

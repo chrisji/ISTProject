@@ -4,7 +4,7 @@ import checkers.exceptions.InvalidMoveException;
 import checkers.model.MoveChain;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 08/10/2015
  */
 public abstract class AI extends Player {

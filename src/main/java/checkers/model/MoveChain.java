@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 29/10/2015
  */
 public class MoveChain implements Cloneable {

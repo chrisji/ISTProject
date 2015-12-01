@@ -12,7 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 26/11/2015
  */
 public class BoardView extends JPanel {
@@ -46,9 +46,9 @@ public class BoardView extends JPanel {
         for (int i = 0; i < Game.ROWS; i++) {
             for (int j = 0; j < Game.COLS; j++) {
                 if (i % 2 == 0 && j % 2 == 0) {
-                    this.add(new RedSqaurePanel());
+                    this.add(new RedSquarePanel());
                 } else if (i % 2 != 0 && j % 2 != 0) {
-                    this.add(new RedSqaurePanel());
+                    this.add(new RedSquarePanel());
                 } else {
                     this.add(new BlackSquarePanel());
                 }
@@ -69,7 +69,7 @@ public class BoardView extends JPanel {
         for (int i = 0; i < Game.ROWS; i++) {
             for (int j = 0; j < Game.COLS; j++) {
                 if (isRedSquarePosition(i, j)) {
-                    this.add(new RedSqaurePanel());
+                    this.add(new RedSquarePanel());
                 } else if (boardState[i][j].isEmpty()) { // Empty black square
                     JPanel square = new BlackSquarePanel();
 

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 26/11/2015
  */
 public class MainView extends JPanel {

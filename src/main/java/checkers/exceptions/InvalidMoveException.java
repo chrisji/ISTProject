@@ -1,7 +1,7 @@
 package checkers.exceptions;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 03/10/2015
  */
 public class InvalidMoveException extends Exception {

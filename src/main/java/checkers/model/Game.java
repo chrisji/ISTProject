@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 03/10/2015
  */
 public class Game {
@@ -328,41 +328,63 @@ public class Game {
 
         // Ensure it's the players turn to make a move
         if (currentTurn != player) {
-            throw new InvalidMoveException("It is not " + player.getName() + "'s turn");
+            throw new InvalidMoveException("Invalid move! It's not your turn.");
         }
 
-        if (player == player1 && !getValidPlayer1Moves(state).contains(move)) {
-            throw new InvalidMoveException();
+        // Ensure the old cell is not out-of-bounds
+        if (move.getFromRow() < 0 || move.getFromRow() >= ROWS || move.getFromCol() < 0 || move.getFromCol() >= COLS) {
+            throw new InvalidMoveException("Cannot move a piece from outside the board's dimensions");
         }
 
-        if (player == player2 && !getValidPlayer2Moves(state).contains(move)) {
-            throw new InvalidMoveException();
+        // Ensure the new cell is not out-of-bounds
+        if (move.getToRow() < 0 || move.getToRow() >= ROWS || move.getToCol() < 0 || move.getToCol() >= COLS) {
+            throw new InvalidMoveException("Cannot move a piece to outside the board's dimensions");
         }
 
-//        // Ensure the old cell is not out-of-bounds
-//        if (move.getFromRow() < 0 || move.getFromRow() >= ROWS || move.getFromCol() < 0 || move.getFromCol() >= COLS) {
-//            throw new InvalidMoveException("Cannot move a piece from outside the board's dimensions");
-//        }
-//
-//        // Ensure the new cell is not out-of-bounds
-//        if (move.getToRow() < 0 || move.getToRow() >= ROWS || move.getToCol() < 0 || move.getToCol() >= COLS) {
-//            throw new InvalidMoveException("Cannot move a piece to outside the board's dimensions");
-//        }
-//
-//        // Ensure the old cell is not empty
-//        if (this.board[move.getFromRow()][move.getFromCol()].isEmpty()) {
-//            throw new InvalidMoveException("There is no piece in cell [" + move.getFromRow() + ", " + move.getFromCol() + "]");
-//        }
-//
-//        // Ensure the new cell is empty
-//        if (!this.board[move.getToRow()][move.getToCol()].isEmpty()) {
-//            throw new InvalidMoveException("There is already a piece in cell [" + move.getToRow() + ", " + move.getToCol() + "]");
-//        }
-//
-//        // Ensure piece to be moved is owned by the player
-//        if (this.board[move.getFromRow()][move.getFromCol()].getContents().getPlayer() != player) {
-//            throw new InvalidMoveException("The piece attempting to be moved is not owned by the current player");
-//        }
+        // Ensure the old cell is not empty
+        if (state.getBoard()[move.getFromRow()][move.getFromCol()].isEmpty()) {
+            throw new InvalidMoveException("There is no piece in that square!");
+        }
+
+        // Ensure the new cell is empty
+        if (!state.getBoard()[move.getToRow()][move.getToCol()].isEmpty()) {
+            throw new InvalidMoveException("There is already a piece in that square!");
+        }
+
+        // Ensure piece to be moved is owned by the player
+        if (state.getBoard()[move.getFromRow()][move.getFromCol()].getContents().getPlayer() != player) {
+            throw new InvalidMoveException("The piece attempting to be moved is not owned by the current player");
+        }
+
+        if (player == player1) {
+            List<Move> moves = getValidPlayer1Moves(state);
+
+            // Check to see if move if a valid move, and if not find the reason.
+            if (!moves.contains(move)) {
+                if (moves.isEmpty()) {
+                    throw new InvalidMoveException("There are no more valid moves left!");
+                } else if (moves.get(0).isTake()) {
+                    throw new InvalidMoveException("Invalid move! Your move must be a capturing move. (Click show help for a hint or see the rules for clarification)");
+                } else {
+                    throw new InvalidMoveException("Invalid move! The pieces can only move diagonally by a single square. (Click 'show help' for a hint, or see the rules for clarification)");
+                }
+            }
+        }
+
+        if (player == player2) {
+            List<Move> moves = getValidPlayer2Moves(state);
+
+            // Check to see if move if a valid move, and if not find the reason.
+            if (!moves.contains(move)) {
+                if (moves.isEmpty()) {
+                    throw new InvalidMoveException("There are no more valid moves left!");
+                } else if (moves.get(0).isTake()) {
+                    throw new InvalidMoveException("Invalid move! Your move must be a capturing move. (Click 'show help' for a hint, or see the rules for clarification)");
+                } else {
+                    throw new InvalidMoveException("Invalid move! The pieces can only move diagonally by a single square. (Click 'show help' for a hint, or see the rules for clarification)");
+                }
+            }
+        }
     }
 
     private boolean isCrowningMove(Player player, Move move) {

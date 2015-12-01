@@ -21,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 28/11/2015
  */
 public class PreGameSettingsView extends JPanel {
@@ -50,7 +50,7 @@ public class PreGameSettingsView extends JPanel {
 
     public PreGameSettingsView(Controller controller) {
         this.controller = controller;
-        this.setLayout(new GridLayout(10, 1));
+        this.setLayout(new GridLayout(11, 1));
         this.setPreferredSize(new Dimension(350, 500));
         this.setOpaque(false);
 
@@ -70,27 +70,27 @@ public class PreGameSettingsView extends JPanel {
         addTitle();
         addTopPlayerDropdown();
         addTopPlayerDifficultyDropdown();
-        addSpacer();
         addBottomPlayerDropdown();
         addBottomPlayerDifficultyDropdown();
-        addSpacer();
         addStartingPlayerDropdown();
+        addSpacer();
         addStartGameButton();
     }
 
     private void addTitle() {
-        JLabel titleLabel = new JLabel("      Game Configuration");
+        JLabel titleLabel = new JLabel("       Game Configuration");
         titleLabel.setFont(new Font("Verdana", Font.BOLD, 22));
         titleLabel.setForeground(Color.WHITE);
         this.add(titleLabel);
     }
 
     private void addTopPlayerDropdown() {
-        JLabel label = new JLabel("Top Player: ");
-        label.setForeground(Color.WHITE);
+        JLabel playerTitle = new JLabel("                     Top Player");
+        playerTitle.setFont(new Font("Verdana", Font.BOLD, 18));
+        playerTitle.setForeground(Color.WHITE);
+        this.add(playerTitle);
 
         topPlayerComboBox = new JComboBox<Object>(possiblePlayers.keySet().toArray());
-
         topPlayerComboBox.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent event) {
                 if (event.getStateChange() == ItemEvent.SELECTED) {
@@ -103,24 +103,26 @@ public class PreGameSettingsView extends JPanel {
                         topDifficultyPanel.setVisible(false);
                     }
                 }
-                repaint();
+                controller.refreshDisplay();
             }
         });
 
-
-        this.add(label);
+        JLabel comboLabel = new JLabel("Type: ");
+        comboLabel.setForeground(Color.WHITE);
 
         JPanel panel = new JPanel();
         panel.setBackground(Color.CYAN);
         panel.setOpaque(false);
+        panel.add(comboLabel);
         panel.add(topPlayerComboBox);
-
         this.add(panel);
     }
 
     private void addBottomPlayerDropdown() {
-        JLabel label = new JLabel("Bottom Player: ");
-        label.setForeground(Color.WHITE);
+        JLabel playerTitle = new JLabel("                   Bottom Player");
+        playerTitle.setFont(new Font("Verdana", Font.BOLD, 18));
+        playerTitle.setForeground(Color.WHITE);
+        this.add(playerTitle);
 
         bottomPlayerComboBox = new JComboBox<Object>(possiblePlayers.keySet().toArray());
 
@@ -136,36 +138,43 @@ public class PreGameSettingsView extends JPanel {
                         bottomDifficultyPanel.setVisible(false);
                     }
                 }
-                repaint();
+                controller.refreshDisplay();
             }
         });
+
+        JLabel comboLabel = new JLabel("Type: ");
+        comboLabel.setForeground(Color.WHITE);
 
         JPanel panel = new JPanel();
         panel.setBackground(Color.GREEN);
         panel.setOpaque(false);
-        panel.add(label);
+        panel.add(comboLabel);
         panel.add(bottomPlayerComboBox);
-
         this.add(panel);
     }
 
     private void addStartingPlayerDropdown() {
-        JLabel label = new JLabel("Starting Player:");
-        label.setForeground(Color.WHITE);
+        JLabel titleLabel = new JLabel("                 Starting Player");
+        titleLabel.setFont(new Font("Verdana", Font.BOLD, 18));
+        titleLabel.setForeground(Color.WHITE);
+        this.add(titleLabel);
+
+        JLabel comboLabel = new JLabel("Side: ");
+        comboLabel.setForeground(Color.WHITE);
 
         startingPlayerComboBox = new JComboBox<Object>(new String[]{"Top", "Bottom"});
         JPanel panel = new JPanel();
         panel.setSize(300, 30);
         panel.setBackground(Color.CYAN);
         panel.setOpaque(false);
-        panel.add(label);
+        panel.add(comboLabel);
         panel.add(startingPlayerComboBox);
 
         this.add(panel);
     }
 
     private void addTopPlayerDifficultyDropdown() {
-        JLabel label = new JLabel("Top Player Difficulty:");
+        JLabel label = new JLabel("Difficulty: ");
         label.setForeground(Color.WHITE);
 
         topDifficultyComboBox = new JComboBox<Object>(possibleDifficulties);
@@ -182,7 +191,7 @@ public class PreGameSettingsView extends JPanel {
     }
 
     private void addBottomPlayerDifficultyDropdown() {
-        JLabel label = new JLabel("Top Player Difficulty:");
+        JLabel label = new JLabel("Difficulty:");
         label.setForeground(Color.WHITE);
 
         bottomDifficultyComboBox = new JComboBox<Object>(possibleDifficulties);

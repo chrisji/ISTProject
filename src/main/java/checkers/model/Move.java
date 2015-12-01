@@ -7,7 +7,7 @@ package checkers.model;
  * was a capturing move, and obtaining the co-ordinates of the piece that this move captured (in the case
  * of a capturing move).
  *
- * @author Chris Inskip
+ * @author 144158
  * @version 03/10/2015
  */
 public class Move {

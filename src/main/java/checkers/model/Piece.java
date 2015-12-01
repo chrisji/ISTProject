@@ -3,7 +3,7 @@ package checkers.model;
 import checkers.players.Player;
 
 /**
- * @author Chris Inskip
+ * @author 144158
  * @version 03/10/2015
  */
 public class Piece implements Cloneable {
