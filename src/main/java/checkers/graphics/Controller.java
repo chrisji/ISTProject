@@ -168,6 +168,9 @@ public class Controller extends JFrame {
      * TODO
      */
     public void startGame() {
+        Player x = game.getPlayer1();
+        Player y = game.getPlayer2();
+
         settingsPanel.resetInGameSettings();
         settingsPanel.showInGameSettings();
         updateBoard();

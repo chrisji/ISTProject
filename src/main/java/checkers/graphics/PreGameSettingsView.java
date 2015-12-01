@@ -98,6 +98,7 @@ public class PreGameSettingsView extends JPanel {
                     }
                 }
                 controller.refreshDisplay();
+                refreshDisplay();
             }
         });
 
@@ -133,6 +134,7 @@ public class PreGameSettingsView extends JPanel {
                     }
                 }
                 controller.refreshDisplay();
+                refreshDisplay();
             }
         });
 
@@ -157,6 +159,13 @@ public class PreGameSettingsView extends JPanel {
         comboLabel.setForeground(Color.WHITE);
 
         startingPlayerComboBox = new JComboBox<Object>(new String[]{"Top", "Bottom"});
+        startingPlayerComboBox.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent event) {
+                controller.refreshDisplay();
+                refreshDisplay();
+            }
+        });
+
         JPanel panel = new JPanel();
         panel.setSize(300, 30);
         panel.setBackground(Color.CYAN);
@@ -172,6 +181,16 @@ public class PreGameSettingsView extends JPanel {
         label.setForeground(Color.WHITE);
 
         topDifficultyComboBox = new JComboBox<Object>(possibleDifficulties);
+        topDifficultyComboBox.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent event) {
+                if (event.getStateChange() == ItemEvent.SELECTED) {
+                    String selectedItem = (String) topDifficultyComboBox.getSelectedItem();
+                    topDifficulty = getDifficultyFromString(selectedItem);
+                }
+                controller.refreshDisplay();
+                refreshDisplay();
+            }
+        });
 
         topDifficultyPanel = new JPanel();
         topDifficultyPanel.setSize(300, 30);
@@ -189,6 +208,16 @@ public class PreGameSettingsView extends JPanel {
         label.setForeground(Color.WHITE);
 
         bottomDifficultyComboBox = new JComboBox<Object>(possibleDifficulties);
+        bottomDifficultyComboBox.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent event) {
+                if (event.getStateChange() == ItemEvent.SELECTED) {
+                    String selectedItem = (String) bottomDifficultyComboBox.getSelectedItem();
+                    bottomDifficulty = getDifficultyFromString(selectedItem);
+                }
+                controller.refreshDisplay();
+                refreshDisplay();
+            }
+        });
 
         bottomDifficultyPanel = new JPanel();
         bottomDifficultyPanel.setSize(300, 30);
@@ -251,6 +280,38 @@ public class PreGameSettingsView extends JPanel {
         } else if (position.toLowerCase().equals("bottom")) {
             this.startingPlayer = bottomPlayer;
         }
+    }
+
+    private int getDifficultyFromString(String difficultyString) {
+        for (int i = 0; i < possibleDifficulties.length; i++) {
+            if (difficultyString.equals(possibleDifficulties[i])) {
+                return i; // index is the difficulty level.
+            }
+        }
+        return -1;
+    }
+
+    private void refreshDisplay() {
+        Timer t = new Timer(0, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                repaint();
+                revalidate();
+
+                topDifficultyComboBox.repaint();
+                topDifficultyComboBox.revalidate();
+                bottomDifficultyComboBox.repaint();
+                bottomDifficultyComboBox.revalidate();
+
+                topPlayerComboBox.repaint();
+                topPlayerComboBox.revalidate();
+                bottomPlayerComboBox.repaint();
+                bottomPlayerComboBox.revalidate();
+            }
+        });
+
+        t.setInitialDelay(200);
+        t.setRepeats(false);
+        t.start();
     }
 
     public Game buildGame() {
