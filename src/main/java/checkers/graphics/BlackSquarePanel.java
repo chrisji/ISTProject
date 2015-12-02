@@ -10,7 +10,6 @@ import java.io.IOException;
 /**
  * Represents a black square on the the GUI's board. It can either be empty, or display an image
  * representing the piece that is on it.
- *
  * @author 144158
  * @version 02/12/2015
  */
@@ -91,8 +90,7 @@ public class BlackSquarePanel extends JPanel {
     }
 
     /**
-     * Paints the specified piece image to the background of the square.
-     *
+     * Paints the specifed image to the background of the square
      * @param g
      */
     @Override

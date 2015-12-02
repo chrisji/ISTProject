@@ -160,9 +160,12 @@ public class AIMiniMax extends AI {
     }
 
     /**
-     * TODO
-     * @param s
-     * @return
+     * Given a game state, returns the number of pieces that remain for player 1
+     * minus the number of pieces that still remain for player 2.
+     *
+     * @param s game `State` to evaluate for.
+     * @return the number of pieces that remain for player 1 minus the number of
+     * pieces that still remain for player 2.
      */
     private int evaluateState(State s) {
         Cell[][] board = s.getBoard();

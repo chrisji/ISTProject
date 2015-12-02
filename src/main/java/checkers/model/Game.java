@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO
+ * Game represents a match being played. It keeps track of the current game state and provides
+ * the core game functionality, e.g. generating valid moves, applying moves to game states,
+ * checking for winners etc.
  *
  * @author 144158
  * @version 02/12/2015
@@ -24,11 +26,9 @@ public class Game {
     private Player startingPlayer;
 
     /**
-     * TODO
-     *
-     * @param player1
-     * @param player2
-     * @param startingPlayer
+     * @param player1 Player that is positioned at the top of the board.
+     * @param player2 Player that is positioned at the bottom of the board.
+     * @param startingPlayer Player that should move first.
      */
     public Game(Player player1, Player player2, Player startingPlayer) {
         this.player1 = player1;
@@ -44,28 +44,28 @@ public class Game {
     }
 
     /**
-     * TODO
+     * Returns the opponent of a given player.
      *
-     * @param player
-     * @return
+     * @param player player to find the opponent of.
+     * @return the opponent of the given player.
      */
     public Player incrementTurn(Player player) {
         return player == player1 ? player2 : player1;
     }
 
     /**
-     * Returns `true` if the current
-     * @param state
-     * @return
+     * Returns `true` if the player in the given state has won.
+     * @param state the State to check for a winner in.
+     * @return `true` if the current player in the given state has won, `false` otherwise
      */
     public boolean hasWinner(State state) {
         return getWinner(state) != null;
     }
 
     /**
-     * Returns the "winning" player for a given state, or `null` if no player has won. A player is declared winner if
-     * they have no more valid moves: this can occur if the player has no more pieces left, or no remaining pieces can
-     * be validly moved.
+     * Returns the "winning" player for a given state, or `null` if no player has won.
+     * A player is declared winner if they have no more valid moves: this can occur
+     * if the player has no more pieces left, or no remaining pieces can be validly moved.
      *
      * @param state the state to check if a player has won.
      * @return the winning `Player` if one exists, `null` otherwise.
@@ -82,12 +82,12 @@ public class Game {
     }
 
     /**
-     * TODO
+     * Applies a single move to the given state, and returns the resulting state.
      *
-     * @param currentState
-     * @param move
-     * @return
-     * @throws InvalidMoveException
+     * @param currentState state to apply the move to
+     * @param move move to apply to the state.
+     * @return the resulting state of applying the move to the given state.
+     * @throws InvalidMoveException if the move supplied was invalid.
      */
     public State movePiece(State currentState, Move move) throws InvalidMoveException {
         Player player = currentState.getTurn();
@@ -141,11 +141,11 @@ public class Game {
     }
 
     /**
-     * TODO
+     * Given player and state, returns a list of valid moves chains for that player.
      *
-     * @param state
-     * @param player
-     * @return
+     * @param state the state to find valid moves for.
+     * @param player the player to find valid moves for.
+     * @return a list of valid move chains for the given state and player.
      * @throws InvalidMoveException
      */
     public List<MoveChain> getMoveChains(State state, Player player) throws InvalidMoveException {
@@ -153,13 +153,14 @@ public class Game {
     }
 
     /**
-     * TODO
+     * Helper function for the getMoveChains method. Recursively builds up a
+     * list of valid move chains.
      *
-     * @param state
-     * @param player
-     * @param moveChains
-     * @param moveChain
-     * @return
+     * @param state state to find valid moves for.
+     * @param player player to find valid moves for.
+     * @param moveChains current set of move chains.
+     * @param moveChain current move chain that is being built upon.
+     * @return the final list of valid move chains for the given state and player.
      * @throws InvalidMoveException
      */
     private List<MoveChain> getMoveChainsHelper(State state, Player player, List<MoveChain> moveChains, MoveChain moveChain) throws InvalidMoveException {
@@ -188,10 +189,10 @@ public class Game {
     }
 
     /**
-     * TODO
+     * Returns the list of valid moves that can be applied to the given state.
      *
-     * @param state
-     * @return
+     * @param state state to find valid moves for.
+     * @return list of valid moves that can be applied to the given state.
      */
     public List<Move> getValidMoves(State state) {
         if (state.getTurn() == player1) {
@@ -202,10 +203,10 @@ public class Game {
     }
 
     /**
-     * TODO
+     * Returns the list of valid moves that player 1 can apply top the given state.
      *
-     * @param state
-     * @return
+     * @param state the state to find valid moves for.
+     * @return possibly empty list of moves that can be legally applied to the given state.
      */
     public List<Move> getValidPlayer1Moves(State state) {
         Cell[][] board = state.getBoard();
@@ -291,10 +292,10 @@ public class Game {
     }
 
     /**
-     * TODO
+     * Returns the list of valid moves that player 2 can apply top the given state.
      *
-     * @param state
-     * @return
+     * @param state the state to find valid moves for.
+     * @return possibly empty list of moves that can be legally applied to the given state.
      */
     public List<Move> getValidPlayer2Moves(State state) {
         Cell[][] board = state.getBoard();
@@ -381,12 +382,13 @@ public class Game {
     }
 
     /**
-     * TODO
+     * Throw and exception if the application of a given move to the given state by
+     * a given player is not valid.
      *
-     * @param state
-     * @param player
-     * @param move
-     * @throws InvalidMoveException
+     * @param state state to apply the move to.
+     * @param player player making the move.
+     * @param move move to test validity for.
+     * @throws InvalidMoveException if the move is not valid.
      */
     private void validateMove(State state, Player player, Move move) throws InvalidMoveException {
         Player currentTurn = state.getTurn();
@@ -453,11 +455,11 @@ public class Game {
     }
 
     /**
-     * TODO
+     * Returns `true` if a move results in the moved piece being crowned, `false` otherwise.
      *
-     * @param player
-     * @param move
-     * @return
+     * @param player player applying the move.
+     * @param move move being applied.
+     * @return `true` if a move results in the moved piece being crowned, `false` otherwise.
      */
     private boolean isCrowningMove(Player player, Move move) {
         // Check if player 1 piece has reached the 'bottom' of the board
@@ -474,52 +476,57 @@ public class Game {
     }
 
     /**
-     * TODO
+     * Returns `true` if the current player has changed between two states, and
+     * `false` if the player remains the same between the two states.
      *
      * @param fromState
      * @param toState
-     * @return
+     * @return true` if the current player has changed between two states, `false` otherwise.
      */
     public boolean hasChangedPlayer(State fromState, State toState) {
         return fromState.getTurn().equals(toState.getTurn());
     }
 
     /**
-     * TODO
-     * @return
+     * Returns the current State associated with this Game.
+     *
+     * @return the current State associated with this Game.
      */
     public State getGameState() {
         return this.gameState;
     }
 
     /**
-     * TODO
-     * @param state
+     * Sets the current State associated with this Game
+     *
+     * @param state the current State associated with this Game
      */
     public void setGameState(State state) {
         this.gameState = state;
     }
 
     /**
-     * TODO
-     * @return
+     * Returns player 1
+     *
+     * @return player 1
      */
     public Player getPlayer1() {
         return this.player1;
     }
 
     /**
-     * TODO
-     * @return
+     * Returns player 2
+     *
+     * @return player 2
      */
     public Player getPlayer2() {
         return this.player2;
     }
 
     /**
-     * TODO
+     * Returns the Player that has been assigned to make the first move.
      *
-     * @return
+     * @return the Player that has been assigned to make the first move.
      */
     public Player getStartingPlayer() {
         return this.startingPlayer;

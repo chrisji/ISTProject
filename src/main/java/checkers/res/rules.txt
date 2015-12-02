@@ -1,0 +1,29 @@
+**********************************************************
+************   General Rules for Checkers  ***************
+**********************************************************
+Now that you have set up the board, you are ready to begin play. First, determine who is to be "black". You can use any method for this you wish, flip a coin, alternate, etc. However, the most common method in amateur play is for one of the players to take one color checker in each hand and hold out his hands before him. The other player chooses a hand, the color checker in that hand determines the color with which he plays.
+
+The object is to eliminate all opposing checkers or to create a situation in which it is impossible for your opponent to make any move. Normally, the victory will be due to complete elimination.
+
+
+Non-capturing Moves
+----------------------------------------------------------
+Black moves first and play proceeds alternately. From their initial positions, checkers may only move forward. There are two types of moves that can be made, capturing moves and non-capturing moves. Non-capturing moves are simply a diagonal move forward from one square to an adjacent square. (Note that the red squares are never used.) Capturing moves occur when a player "jumps" an opposing piece. This is also done on the diagonal and can only happen when the square behind (on the same diagonal) is also open. This means that you may not jump an opposing piece around a corner.
+
+
+Capturing Moves
+----------------------------------------------------------
+On a capturing move, a piece may make multiple jumps. If after a jump a player is in a position to make another jump then he may do so. This means that a player may make several jumps in succession, capturing several pieces on a single turn.
+
+
+Forced Captures
+----------------------------------------------------------
+When a player is in a position to make a capturing move, he must make a capturing move. When he has more than one capturing move to choose from he may take whichever move suits him.
+
+
+Crowning King in Checkers
+----------------------------------------------------------
+When a checker achieves the opponent's edge of the board (called the "king's row") it is crowned with another checker. This signifies that the checker has been made a king. The king now gains an added ability to move backward. The king may now also jump in either direction or even in both directions in one turn (if he makes multiple jumps).
+
+
+(Adapted from: http://www.indepthinfo.com/checkers)

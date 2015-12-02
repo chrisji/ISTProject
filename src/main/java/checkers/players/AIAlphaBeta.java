@@ -90,7 +90,7 @@ public class AIAlphaBeta extends AI {
                 State resultState = getGame().doMoveChain(getGame().getGameState(), moveChain);
                 int score = alphaBeta(resultState, depth - 1, alpha, beta, getGame().incrementTurn(this));
                 scores.add(score);
-                
+
                 System.out.println("Move Chain:" + moveChain.getMoves().toString() + " alpha-beta score: " + score);
             }
 

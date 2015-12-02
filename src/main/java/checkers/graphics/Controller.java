@@ -273,7 +273,7 @@ public class Controller extends JFrame {
     public void showRules() {
         StringBuilder builder = new StringBuilder();
         try {
-            for (String line : Files.readAllLines(Paths.get("res/rules.txt"))) {
+            for (String line : Files.readAllLines(Paths.get("checkers/res/rules.txt"))) {
                 builder.append(line);
                 builder.append("\n");
             }
