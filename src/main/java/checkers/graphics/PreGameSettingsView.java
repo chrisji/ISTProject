@@ -15,6 +15,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * Panel representing the settings that will be displayed before a match is being
+ * played.
+ *
  * @author 144158
  * @version 02/12/2015
  */
@@ -48,10 +51,12 @@ public class PreGameSettingsView extends JPanel {
         this.setPreferredSize(new Dimension(350, 500));
         this.setOpaque(false);
 
+        // Init players to two humans.
         topPlayer = PlayerFactory.buildPlayer(PlayerFactory.HUMAN, "A");
         bottomPlayer = PlayerFactory.buildPlayer(PlayerFactory.HUMAN, "B");
-        startingPlayer = bottomPlayer;
+        startingPlayer = topPlayer;
 
+        // Init all possible players
         possiblePlayers = new LinkedHashMap<String, Integer>(); // Keeps ordering
         possiblePlayers.put("Human", PlayerFactory.HUMAN);
         possiblePlayers.put("Alpha-Beta AI", PlayerFactory.ALPHA_BETA_AI);
@@ -59,6 +64,7 @@ public class PreGameSettingsView extends JPanel {
         possiblePlayers.put("First Valid Move AI", PlayerFactory.FIRST_MOVE_AI);
         possiblePlayers.put("Random Valid Move AI", PlayerFactory.RANDOM_MOVE_AI);
 
+        // Init all possible difficulty levels
         possibleDifficulties = new String[]{"Suicidal", "Easy", "Medium", "Hard", "Insane"};
 
         addTitle();
@@ -320,6 +326,7 @@ public class PreGameSettingsView extends JPanel {
     }
 
     public void reset() {
-        System.out.println("InGameSettingsPanel | resetting view back to default parameters...");
+        // Could reset all the drop-downs back to default, but it's fairly nice
+        // to keep the previous settings after a game.
     }
 }

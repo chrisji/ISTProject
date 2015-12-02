@@ -39,6 +39,8 @@ public class PlayerFactory {
         } else if (player == RANDOM_MOVE_AI) {
             return new RandomAI(name);
         }
+
+        // No player found by that constant...
         return null;
     }
 }

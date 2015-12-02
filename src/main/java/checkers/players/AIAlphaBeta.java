@@ -11,36 +11,50 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * TODO
+ *  AIAlphaBeta` is an `AI` that generates its next move chain using the minimax algorithm with
+ *  alpha-beta pruning. The evaluation function for this zero-sum game is simply the the number of
+ *  pieces that remain for player 1 minus the number of pieces that still remain for player 2.
+ *
  * @author 144158
  * @version 02/12/2015
  */
 public class AIAlphaBeta extends AI {
 
-    private int depth = 8;
+    // Used to compare the number of static evaluations with other algorithms.
     private static long evalCounter = 0;
-    private int difficulty = AI.DIFFICULTY_INSANE;
+
+    private int depth;
+    private int difficulty;
 
     /**
+     * Creates a new AIAlphaBeta player with a maximum depth to explore of 8, and
+     * a medium difficulty level.
+     *
      * @param name Custom name for the player.
      */
     public AIAlphaBeta(String name) {
         super(name, true); // `true`, since there are multiple difficulty levels.
+        this.depth = 8;
+        this.difficulty = AI.DIFFICULTY_MEDIUM;
     }
 
     /**
-     * TODO
-     * @param name
-     * @param depth
+     * Creates a new AIAlphaBeta player with the specified maximum depth to explore, and
+     * a medium difficulty level.
+     *
+     * @param name Custom name for the player.
+     * @param depth maximum depth that the algorithm should explore to.
      */
     public AIAlphaBeta(String name, int depth) {
         super(name, true);
         this.depth = depth;
+        this.difficulty = AI.DIFFICULTY_MEDIUM;
     }
 
     /**
-     * TODO
-     * @param depth
+     * Sets the depth that the algorithm should explore to.
+     *
+     * @param depth the depth that the algorithm should explore to.
      */
     public void setDepth(int depth) {
         this.depth = depth;
@@ -76,6 +90,7 @@ public class AIAlphaBeta extends AI {
                 State resultState = getGame().doMoveChain(getGame().getGameState(), moveChain);
                 int score = alphaBeta(resultState, depth - 1, alpha, beta, getGame().incrementTurn(this));
                 scores.add(score);
+                
                 System.out.println("Move Chain:" + moveChain.getMoves().toString() + " alpha-beta score: " + score);
             }
 
@@ -90,7 +105,9 @@ public class AIAlphaBeta extends AI {
     }
 
     /**
-     * TODO
+     * Implementation of the minimax algorithm with alpha-beta pruning. See the
+     * pseudo-code below:
+     *
      function alphabeta(node, depth, alpha, beta, player)
         if depth == 0 or node == leaf
             return the value of node
@@ -166,9 +183,12 @@ public class AIAlphaBeta extends AI {
     }
 
     /**
-     * TODO
-     * @param s
-     * @return
+     * Given a game state, returns the number of pieces that remain for player 1
+     * minus the number of pieces that still remain for player 2.
+     *
+     * @param s game `State` to evaluate for.
+     * @return the number of pieces that remain for player 1 minus the number of
+     * pieces that still remain for player 2.
      */
     private int evaluateState(State s) {
         Cell[][] board = s.getBoard();
@@ -191,43 +211,24 @@ public class AIAlphaBeta extends AI {
             }
         }
 
-        evalCounter++; // TODO: remove debugging
+        evalCounter++;
         return score;
     }
 
-    public int getBestValue(int value1, int value2) {
-        // Check to see if this player is the game's player 1, and therefore 'MAX'.
-        boolean isMax = this == getGame().getPlayer1();
-
-        if (isMax) {
-            return Math.max(value1, value2);
-        } else {
-            return Math.min(value1, value2);
-        }
-    }
-
     /**
-     * TODO
+     * Given a list of `MoveChain`s, return the MoveChain that best suits
+     * the specified difficulty level for this AI.
      *
-     * @return
-     */
-    public int getWorstValue() {
-        // Check to see if this player is the game's player 1, and therefore 'MAX'.
-        boolean isMax = this == getGame().getPlayer1();
-
-        if (isMax) {
-            return Integer.MIN_VALUE;
-        } else {
-            return Integer.MAX_VALUE;
-        }
-    }
-
-    /**
-     * TODO
+     * Difficulties and their actions:
+     *  - Suicidal: always returns the worst scoring move chain.
+     *  - Easy: returns one of the worst 3 scoring move chains at random.
+     *  - Medium: returns one of the best 3 scoring move chains at random.
+     *  - Hard: returns one of the best 2 scoring move chains at random.
+     *  - Insane: always returns the best scoring move chain.
      *
-     * @param moveChains
-     * @param scores
-     * @return
+     * @param moveChains possible move chains.
+     * @param scores scores for each possible move chain.
+     * @return the MoveChain that best suits the specified difficulty level for this AI.
      */
     public MoveChain getDifficultyBasedMoveChain(List<MoveChain> moveChains, List<Integer> scores) {
         if (moveChains.isEmpty()) {
@@ -279,8 +280,6 @@ public class AIAlphaBeta extends AI {
             }
         }
 
-        System.out.println("Desired score for difficulty=" + difficulty + " is " + desiredScore);
-
         // Return move with desired score.
         for (int i = 0; i < moveChains.size(); i++) {
             if (scores.get(i) == desiredScore) {
@@ -288,9 +287,15 @@ public class AIAlphaBeta extends AI {
             }
         }
 
+        // No move chains in move chain list
         return null;
     }
 
+    /**
+     * Sets the difficulty level that the AI should play at.
+     *
+     * @param difficulty difficulty level that the AI should play at.
+     */
     public void setDifficulty(int difficulty) {
         this.setDepth(8);
         this.difficulty = difficulty;

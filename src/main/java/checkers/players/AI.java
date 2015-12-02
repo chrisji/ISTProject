@@ -43,9 +43,9 @@ public abstract class AI extends Player {
     /**
      * Sets the difficulty level that the AI should play at.
      *
-     * @param difficultyLevel difficulty level that the AI should play at.
+     * @param difficulty difficulty level that the AI should play at.
      */
-    public abstract void setDifficulty(int difficultyLevel);
+    public abstract void setDifficulty(int difficulty);
 
     /**
      * Calculates and returns the chain of moves of the current turn.

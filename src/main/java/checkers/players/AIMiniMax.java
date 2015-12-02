@@ -12,7 +12,9 @@ import java.util.Random;
 
 /**
  * `AIMiniMax` is an `AI` that generates its next move chain using the minimax algorithm. For this
- * algorithm no tree pruning is performed (see AIAlphaBeta for minimax with alpha-beta pruning).
+ * algorithm no tree pruning is performed (see AIAlphaBeta for minimax with alpha-beta pruning). The
+ * evaluation function for this zero-sum game is simply the the number of pieces that remain for
+ * player 1 minus the number of pieces that still remain for player 2.
  *
  * @author 144158
  * @version 02/12/2015
@@ -100,8 +102,7 @@ public class AIMiniMax extends AI {
     }
 
     /**
-     *
-     * TODO
+     * Implementation of the minimax algorithm. See the pseudo-code below:
      *
      function minimax(node, depth, player)
         if depth == 0 or node == leaf
@@ -135,7 +136,6 @@ public class AIMiniMax extends AI {
                 for (MoveChain moveChain : getGame().getMoveChains(state, player)) {
                     int eval = minimax(getGame().doMoveChain(state, moveChain), depth - 1, getGame().getPlayer2());
                     bestValue = Math.max(bestValue, eval);
-//                    System.out.println("MAX, BEST VALUE=" + bestValue + ", DEPTH=" + depth);
                 }
             } catch (InvalidMoveException e) {
                 e.printStackTrace();
@@ -150,7 +150,6 @@ public class AIMiniMax extends AI {
                 for (MoveChain moveChain : getGame().getMoveChains(state, player)) {
                     int eval = minimax(getGame().doMoveChain(state, moveChain), depth - 1, getGame().getPlayer1());
                     bestValue = Math.min(bestValue, eval);
-//                    System.out.println("MIN, BEST VALUE=" + bestValue + ", DEPTH=" + depth);
                 }
             } catch (InvalidMoveException e) {
                 e.printStackTrace();
@@ -186,48 +185,24 @@ public class AIMiniMax extends AI {
             }
         }
 
-        evalCounter++; // TODO: remove debugging
+        evalCounter++;
         return score;
     }
 
     /**
-     * TODO
+     * Given a list of `MoveChain`s, return the MoveChain that best suits
+     * the specified difficulty level for this AI.
      *
-     * @param value1
-     * @param value2
-     * @return
-     */
-    public int getBestValue(int value1, int value2) {
-        boolean isMax = this == getGame().getPlayer1();
-
-        if (isMax) {
-            return Math.max(value1, value2);
-        } else {
-            return Math.min(value1, value2);
-        }
-    }
-
-    /**
-     * TODO
+     * Difficulties and their actions:
+     *  - Suicidal: always returns the worst scoring move chain.
+     *  - Easy: returns one of the worst 3 scoring move chains at random.
+     *  - Medium: returns one of the best 3 scoring move chains at random.
+     *  - Hard: returns one of the best 2 scoring move chains at random.
+     *  - Insane: always returns the best scoring move chain.
      *
-     * @return
-     */
-    public int getWorstValue() {
-        boolean isMax = this == getGame().getPlayer1();
-
-        if (isMax) {
-            return Integer.MIN_VALUE;
-        } else {
-            return Integer.MAX_VALUE;
-        }
-    }
-
-    /**
-     * TODO
-     *
-     * @param moveChains
-     * @param scores
-     * @return
+     * @param moveChains possible move chains.
+     * @param scores scores for each possible move chain.
+     * @return the MoveChain that best suits the specified difficulty level for this AI.
      */
     public MoveChain getDifficultyBasedMoveChain(List<MoveChain> moveChains, List<Integer> scores) {
         if (moveChains.isEmpty()) {
@@ -279,8 +254,6 @@ public class AIMiniMax extends AI {
             }
         }
 
-        System.out.println("Desired score for difficulty=" + difficulty + " is " + desiredScore);
-
         // Return move with desired score.
         for (int i = 0; i < moveChains.size(); i++) {
             if (scores.get(i) == desiredScore) {
@@ -288,9 +261,15 @@ public class AIMiniMax extends AI {
             }
         }
 
+        // No move chains in move chain list
         return null;
     }
 
+    /**
+     * Sets the difficulty level that the AI should play at.
+     *
+     * @param difficulty difficulty level that the AI should play at.
+     */
     public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
     }
