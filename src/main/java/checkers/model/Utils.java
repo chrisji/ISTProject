@@ -3,6 +3,9 @@ package checkers.model;
 import checkers.players.Player;
 
 /**
+ * Utility methods that are used during a checkers game, such as generating initial
+ * board states and cloning boards.
+ *
  * @author 144158
  * @version 02/12/2015
  */
@@ -32,7 +35,12 @@ public class Utils {
         return board;
     }
 
-    // TODO: refactor this shit?
+    /**
+     * TODO
+     * @param board
+     * @param player1
+     * @return
+     */
     private static Cell[][] addPlayer1Pieces(Cell[][] board, Player player1) {
         board[0][1].setContents(new Piece(player1));
         board[0][3].setContents(new Piece(player1));
@@ -49,7 +57,13 @@ public class Utils {
         return board;
     }
 
-    // TODO: refactor this shit?
+    /**
+     * TODO
+     *
+     * @param board
+     * @param player2
+     * @return
+     */
     private static Cell[][] addPlayer2Pieces(Cell[][] board, Player player2) {
         board[5][0].setContents(new Piece(player2));
         board[5][2].setContents(new Piece(player2));
@@ -92,9 +106,7 @@ public class Utils {
     }
 
     /**
-     * Visual Debugging.
-     *
-     * Prints the board out to the console.
+     * Prints the board out to the console, used for visual debugging.
      */
     public static void printBoard(Cell[][] board) {
         int rows = board.length;

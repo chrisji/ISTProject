@@ -370,12 +370,4 @@ public class Controller extends JFrame {
             doNextTurn();
         }
     }
-
-    /**
-     * TODO
-     * @param args
-     */
-    public static void main(String[] args) {
-        new Controller();
-    }
 }
