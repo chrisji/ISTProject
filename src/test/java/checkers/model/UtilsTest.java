@@ -1,15 +1,13 @@
-package checkers;
+package checkers.model;
 
-import checkers.model.Cell;
-import checkers.model.Piece;
-import checkers.model.Utils;
 import checkers.players.Player;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 /**
- * Created by Chris on 29/10/2015.
+ * @author 144158
+ * @version 02/12/2015
  */
 public class UtilsTest {
 

@@ -1,7 +1,8 @@
 package checkers.model;
 
 /**
- * TODO
+ * `Cell` represents a square on the board. This cell can either be empty, or
+ * contain a checkers piece.
  *
  * @author 144158
  * @version 02/12/2015
@@ -10,14 +11,14 @@ public class Cell implements Cloneable {
     private Piece piece;
 
     /**
-     * TODO
+     * Creates an empty `Cell`.
      */
     public Cell() {
         this.piece = null;
     }
 
     /**
-     * TODO
+     * Create a `Cell` that contains the specified piece.
      * @param piece
      */
     public Cell(Piece piece) {
@@ -25,33 +26,35 @@ public class Cell implements Cloneable {
     }
 
     /**
-     * TODO
-     * @return
+     * Returns the `Piece` that is occupying this cell.
+     * @return the `Piece` that is occupying this cell, or `null` if empty.
      */
     public Piece getContents() {
         return piece;
     }
 
     /**
-     * TODO
-     * @param piece
+     * Sets the contents of the cell to the specified piece.
+     *
+     * @param piece `Piece` to add to this cell.
      */
     public void setContents(Piece piece) {
         this.piece = piece;
     }
 
     /**
-     * TODO
+     * Returns `true` if this cell does not contain a piece, `false` otherwise.
      *
-     * @return
+     * @return `true` if this cell does not contain a piece, `false` otherwise.
      */
     public boolean isEmpty() {
         return piece == null;
     }
 
     /**
-     * TODO
-     * @return
+     * Removes and returns the piece contained in this cell.
+     *
+     * @return the piece contained in this cell, and `null` if no piece exists.
      */
     public Piece removeContents() {
         Piece p = this.piece;
@@ -60,9 +63,9 @@ public class Cell implements Cloneable {
     }
 
     /**
-     * TODO
+     * Clones the current cell AND the piece that it contains.
      *
-     * @return
+     * @return the cloned cell.
      * @throws CloneNotSupportedException
      */
     @Override

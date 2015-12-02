@@ -47,8 +47,18 @@ public class AIAlphaBeta extends AI {
     }
 
     /**
-     * TODO
-     * @return
+     * Generates and returns the move chain for this AI's current turn. The
+     * move chain is obtained using the minimax algorithm with alpha-beta
+     * pruning, and takes into account the difficulty level.
+     *
+     * Difficulties and their actions:
+     *  - Suicidal: always returns the worst scoring move chain.
+     *  - Easy: returns one of the worst 3 scoring move chains at random.
+     *  - Medium: returns one of the best 3 scoring move chains at random.
+     *  - Hard: returns one of the best 2 scoring move chains at random.
+     *  - Insane: always returns the best scoring move chain.
+     *
+     * @return the move chain for this AI's current turn.
      * @throws InvalidMoveException
      */
     public MoveChain nextMoveChain() throws InvalidMoveException {

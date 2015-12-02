@@ -6,8 +6,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * @author Chris
- * @version 02/11/2015
+ * @author 144158
+ * @version 02/12/2015
  */
 public class PieceTest {
 

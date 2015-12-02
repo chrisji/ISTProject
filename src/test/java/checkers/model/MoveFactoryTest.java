@@ -5,7 +5,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Created by Chris on 01/11/2015.
+ * @author 144158
+ * @version 02/12/2015
  */
 public class MoveFactoryTest {
 

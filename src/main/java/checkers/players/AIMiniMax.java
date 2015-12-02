@@ -61,7 +61,7 @@ public class AIMiniMax extends AI {
 
     /**
      * Generates and returns the move chain for this AI's current turn. The
-     * move chain is obatined using the minimax algorithm with no pruning, and
+     * move chain is obtained using the minimax algorithm with no pruning, and
      * takes into account the difficulty level.
      *
      * Difficulties and their actions:

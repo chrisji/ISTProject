@@ -17,12 +17,12 @@ public class Move {
     private final int toCol;
 
     /**
-     * TODO
+     * Creates a new `Move` with the specified from-to co-ordinates.
      *
-     * @param fromRow
-     * @param fromCol
-     * @param toRow
-     * @param toCol
+     * @param fromRow the row index of the piece being moved.
+     * @param fromCol the column index of the piece being moved.
+     * @param toRow the row index of the cell to move into.
+     * @param toCol the column index of the cell to move into.
      */
     public Move(int fromRow, int fromCol, int toRow, int toCol) {
         this.fromRow = fromRow;
@@ -94,6 +94,11 @@ public class Move {
         return (fromCol + toCol) / 2;
     }
 
+    /**
+     * Returns the `String` representation of the move.
+     *
+     * @return the `String` representation of the move.
+     */
     @Override
     public String toString() {
         return String.format("(%d, %d) -> (%d, %d) isTake=%b", fromRow, fromCol, toRow, toCol, isTake());

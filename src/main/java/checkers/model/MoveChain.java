@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO
+ * Data structure that is used to represent a sequence `Move`s making up a turn.
  *
  * @author 144158
  * @version 02/12/2015
@@ -12,12 +12,15 @@ import java.util.List;
 public class MoveChain implements Cloneable {
     List<Move> moves;
 
+    /**
+     * Creates a new `MoveChain`, with an empty sequence of moves.
+     */
     public MoveChain() {
         this.moves = new ArrayList<Move>();
     }
 
     /**
-     * TODO
+     * Creates a new `MoveChain`, with a given sequence of moves.
      *
      * @param moves
      */
@@ -26,31 +29,32 @@ public class MoveChain implements Cloneable {
 
         for (Move m: moves) {
             this.moves.add(m);
-            System.out.println(m);
         }
     }
 
     /**
-     * TODO
+     * Adds a move to the move chain sequence
      *
-     * @param move
+     * @param move `Move` to add to the move chain sequence.
      */
     public void addMove(Move move) {
         this.moves.add(move);
     }
 
     /**
-     * TODO
+     * Returns the `List` of `Move`s that this move chain is storing.
      *
-     * @return
+     * @return `List` of `Move`s that this move chain is storing.
      */
     public List<Move> getMoves() {
         return this.moves;
     }
 
     /**
-     * TODO
-     * @return
+     * Clones and returns the current `MoveChain`. Since the `Move`s that move
+     * chain is storing are immutable, they are not cloned.
+     *
+     * @return the cloned `MoveChain`.
      */
     @Override
     public MoveChain clone() {

@@ -3,20 +3,15 @@ package checkers.model;
 import checkers.players.Player;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 /**
- * Created by Chris on 29/10/2015.
+ * @author 144158
+ * @version 02/12/2015
  */
 public class GameTest {
-
-    @Test
-    public void testDoMoveChain() throws Exception {
-
-    }
 
     @Test
     public void testGetMoveChains() throws Exception {
