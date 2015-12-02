@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * TODO
+ * `MainView` is simply and container to hold both the board and the settings.
  *
  * @author 144158
  * @version 02/12/2015
@@ -12,18 +12,17 @@ import java.awt.*;
 public class MainView extends JPanel {
 
     /**
-     * TODO
+     * Creates the `MainView` that will be used to hold the board and the
+     * settings panels
      *
      * @param boardView
      * @param settingsPanel
      */
     public MainView(BoardView boardView, SettingsPanel settingsPanel) {
-//        this.setBackground(new Color(70, 50, 22));
-//        this.setBackground(new Color(24, 64, 18));
         this.setBackground(new Color(73, 73, 73));
-
         this.setLayout(new BorderLayout());
 
+        // Setup main title
         JLabel titleLabel = new JLabel("IST Checkers");
         titleLabel.setFont(new Font("Verdana", Font.BOLD, 20));
         titleLabel.setForeground(Color.WHITE);
@@ -37,6 +36,7 @@ public class MainView extends JPanel {
         JLabel rightSpacer = new JLabel(" ");
         rightSpacer.setFont(new Font("Verdana", Font.BOLD, 20));
 
+        // Add components to correct positions.
         this.add(leftSpacer, BorderLayout.WEST);
         this.add(rightSpacer, BorderLayout.SOUTH);
         this.add(titlePanel, BorderLayout.NORTH);

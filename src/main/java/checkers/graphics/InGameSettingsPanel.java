@@ -6,7 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * TODO
+ * Panel representing the settings that will be displayed during a match is being
+ * played.
  *
  * @author 144158
  * @version 02/12/2015
@@ -17,8 +18,7 @@ public class InGameSettingsPanel extends JPanel {
     private JTextArea messageArea;
 
     /**
-     * TODO
-     * @param controller
+     * @param controller game controller
      */
     public InGameSettingsPanel(Controller controller) {
         this.controller = controller;
@@ -37,7 +37,7 @@ public class InGameSettingsPanel extends JPanel {
     }
 
     /**
-     * TODO
+     * Adds the title "Options" to the panel.
      */
     private void addTitle() {
         JLabel titleLabel = new JLabel("                Options");
@@ -47,7 +47,7 @@ public class InGameSettingsPanel extends JPanel {
     }
 
     /**
-     * TODO
+     * Adds the button to go back to the main menu to the panel.
      */
     private void addBackToMainMenuButton() {
         JButton mainMenuButton = new JButton("New Game");
@@ -61,7 +61,7 @@ public class InGameSettingsPanel extends JPanel {
     }
 
     /**
-     * TODO
+     * Adds the button to show hints to the panel.
      */
     private void addShowHintButton() {
         JButton showHintButton = new JButton("Show Help");
@@ -75,7 +75,7 @@ public class InGameSettingsPanel extends JPanel {
     }
 
     /**
-     * TODO
+     * Adds the button to show rules to the panel.
      */
     private void addShowRulesButton() {
         JButton showRulesButton = new JButton("Show Rules");
@@ -89,7 +89,7 @@ public class InGameSettingsPanel extends JPanel {
     }
 
     /**
-     * TODO
+     * Adds the messages section to the panel.
      */
     private void addMessagePanel() {
         JLabel titleLabel = new JLabel("              Messages");
@@ -108,8 +108,10 @@ public class InGameSettingsPanel extends JPanel {
     }
 
     /**
-     * TODO
-     * @param messages
+     * Given a list of message Strings, shows each one as a bullet point
+     * in the message panel.
+     *
+     * @param messages messages, where each message is a single String.
      */
     public void setMessages(String... messages) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -124,7 +126,7 @@ public class InGameSettingsPanel extends JPanel {
     }
 
     /**
-     * TODO
+     * Adds a spacer - for formatting purposes.
      */
     private void addSpacer() {
         JPanel spacerPanel = new JPanel();
@@ -133,7 +135,7 @@ public class InGameSettingsPanel extends JPanel {
     }
 
     /**
-     * TODO
+     * Resets the settings panel back to before any changes were made to it.
      */
     public void reset() {
         messageArea.setText("");

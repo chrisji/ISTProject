@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * TODO
+ * Holds two settings panels (pre-game and in-game), and allows them to be switched
+ * in and out.
  *
  * @author 144158
  * @version 02/12/2015
@@ -20,8 +21,6 @@ public class SettingsPanel extends JPanel {
     private InGameSettingsPanel inGameSettingsPanel;
 
     /**
-     * TODO
-     *
      * @param preGameView
      * @param inGameView
      */
@@ -39,38 +38,22 @@ public class SettingsPanel extends JPanel {
         this.inGameSettingsPanel = inGameView;
     }
 
-    /**
-     * TODO
-     */
     public void resetInGameSettings() {
         this.inGameSettingsPanel.reset();
     }
 
-    /**
-     * TODO
-     */
     public void showInGameSettings() {
         cardLayout.show(this, IN_GAME_SETTINGS_NAME);
     }
 
-    /**
-     * TODO
-     */
     public void resetPreGameSettings() {
         this.preGameSettingsView.reset();
     }
 
-    /**
-     * TODO
-     */
     public void showPreGameSettings() {
         cardLayout.show(this, PRE_GAME_SETTINGS_NAME);
     }
 
-    /**
-     * TODO
-     * @param messages
-     */
     public void setMessages(String... messages) {
         inGameSettingsPanel.setMessages(messages);
     }

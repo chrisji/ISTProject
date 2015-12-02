@@ -14,7 +14,7 @@ import java.io.IOException;
  * @author 144158
  * @version 02/12/2015
  */
-public class BlackSquarePanel extends SquarePanel {
+public class BlackSquarePanel extends JPanel {
 
     private boolean hinted = false;
 

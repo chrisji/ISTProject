@@ -18,40 +18,45 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * TODO
+ * `Controller` is the controller for the checker's MVC pattern. It stores and
+ * manipulates the underlying `Game`, and updates the front-end views accordingly.
  *
  * @author 144158
  * @version 02/12/2015
  */
 public class Controller extends JFrame {
 
+    // Window properties
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 600;
+    private static final String TITLE = "144158";
 
     // Views
     private MainView mainView;
     private BoardView boardView;
     private SettingsPanel settingsPanel;
 
+    // Underlying game model
     private Game game;
-    private boolean quitGameRequest = false;
 
+    private boolean quitGameRequest = false;
     private boolean moveInProgress = false;
     private int fromRow = -1;
     private int fromCol = -1;
 
     /**
-     * TODO
+     * Creates the controller for the checker's MVC pattern, and displays the starting
+     * screen of the GUI.
      */
     public Controller() {
         // Init views
         boardView = new BoardView();
         settingsPanel = new SettingsPanel(new PreGameSettingsView(this), new InGameSettingsPanel(this));
         mainView = new MainView(boardView, settingsPanel);
+        this.add(mainView);
 
         // JFrame properties
-        this.add(mainView);
-        this.setTitle("144158");
+        this.setTitle(TITLE);
         this.setSize(WIDTH, HEIGHT);
         this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -59,31 +64,34 @@ public class Controller extends JFrame {
     }
 
     /**
-     * TODO
-     * @param game
+     * Sets the underlying game model that the controller should operate on.
+     *
+     * @param game underlying `Game` model.
      */
     public void setGame(Game game) {
         this.game = game;
     }
 
     /**
-     * TODO
-     * @return
+     * Returns the underlying game model that the controller is operating on.
+     *
+     * @return the underlying `Game` model.
      */
     public Game getGame() {
         return this.game;
     }
 
     /**
-     * TODO
-     * @return
+     * Returns the `Player` that is controlling the 'black' pieces
+     *
+     * @return the `Player` that is controlling the 'black' pieces
      */
     public Player getBlackPlayer() {
         return game.getStartingPlayer();
     }
 
     /**
-     * TODO
+     * Updates the board to keep it in sync with the model.
      */
     public void updateBoard() {
         boardView.updateGrid(this);
@@ -91,7 +99,7 @@ public class Controller extends JFrame {
     }
 
     /**
-     * TODO
+     * Ensures all of the views are repainted to represent any changes.
      */
     public void refreshDisplay() {
         mainView.repaint();
@@ -106,11 +114,14 @@ public class Controller extends JFrame {
     }
 
     /**
-     * TODO
+     * Does the action that happens when the an empty cell is clicked. This will
+     * check to see a piece is being moved, and if so try and move it to the empty cell.
+     * If this move is not valid, then it will show the corresponding invalid move message
+     * in the messages panel.
      *
-     * @param toRow
-     * @param toCol
-     * @return
+     * @param toRow empty cell's row index.
+     * @param toCol empty cell's column index.
+     * @return `true` if the cell clicked resulted in a valid move, `false` otherwise.
      */
     public boolean clickedEmptyCell(int toRow, int toCol) {
         if (moveInProgress) {
@@ -125,6 +136,7 @@ public class Controller extends JFrame {
                 updateBoard();
                 settingsPanel.setMessages();
 
+                // Move was successful, so move on to the next player's turn
                 if (currentPlayer != game.getGameState().getTurn()) {
                     doNextTurn();
                 }
@@ -135,15 +147,16 @@ public class Controller extends JFrame {
             }
         }
 
+        // Move was valid.
         return true;
     }
 
     /**
-     * TODO
+     * Does the action that happens when the an occupied cell is clicked.
      *
-     * @param fromRow
-     * @param fromCol
-     * @return
+     * @param fromRow row index of the occupied cell.
+     * @param fromCol column index of the occupied cell.
+     * @return `true` if the piece can be moved by the current player, `false` otherwise.
      */
     public boolean clickedOccupiedCell(int fromRow, int fromCol) {
         // Get the underlying cell that has been clicked.
@@ -165,12 +178,10 @@ public class Controller extends JFrame {
     }
 
     /**
-     * TODO
+     * Updates the board to represent the game's board configuration, and
+     * performs the first move.
      */
     public void startGame() {
-        Player x = game.getPlayer1();
-        Player y = game.getPlayer2();
-
         settingsPanel.resetInGameSettings();
         settingsPanel.showInGameSettings();
         updateBoard();
@@ -178,7 +189,7 @@ public class Controller extends JFrame {
     }
 
     /**
-     * TODO
+     * Highlights all squares that are movable for the current player.
      */
     public void showHint() {
         try {
@@ -193,7 +204,7 @@ public class Controller extends JFrame {
     }
 
     /**
-     * TODO
+     * Pops up a window to show the winning player color.
      */
     public void showWinner() {
         String winner = "Red wins!";
@@ -206,7 +217,7 @@ public class Controller extends JFrame {
     }
 
     /**
-     * TODO
+     * Goes back to the main menu, ready for a new game to be set-up.
      */
     public void gotoMainMenu() {
         moveInProgress = false;
@@ -219,7 +230,9 @@ public class Controller extends JFrame {
     }
 
     /**
-     * TODO
+     * Send a request for the main menu to be shown. This is needed since move animations have to end
+     * before the main menu can be shown. The main menu will therefore be shown as soon as the
+     * animations have finished.
      */
     public void requestMainMenu() {
         if (!game.hasWinner(game.getGameState()) && game.getGameState().getTurn() instanceof AI) {
@@ -230,7 +243,8 @@ public class Controller extends JFrame {
     }
 
     /**
-     * TODO
+     * Switches to the next player (and in the case of an AI, performs their next turn).
+     * If a player has won, then the game is over, and the winner will be shown.
      */
     public void doNextTurn() {
         if (!quitGameRequest) {
@@ -254,7 +268,7 @@ public class Controller extends JFrame {
     }
 
     /**
-     * TODO
+     * Pops up a window showing the checkers rules.
      */
     public void showRules() {
         StringBuilder builder = new StringBuilder();
@@ -288,18 +302,21 @@ public class Controller extends JFrame {
     }
 
     /**
-     * TODO
-     * @param ai
+     * Performs the AI's turn with appropriate move-by-move animations.
+     *
+     * @param ai the `AI` to carry out the turn for.
      */
     private void doAITurn(AI ai) {
         try {
             final List<Move> moves = ai.nextMoveChain().getMoves();
 
+            // Time before the AI actually starts the move process.
             final Timer thinkingTimer = new Timer(200, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     doNextAIMove(moves, 0);
                 }
             });
+
             thinkingTimer.setRepeats(false);
             thinkingTimer.start();
         } catch (InvalidMoveException e) {
@@ -308,9 +325,11 @@ public class Controller extends JFrame {
     }
 
     /**
-     * TODO
-     * @param moves
-     * @param moveNumber
+     * Does a single move of the AI's move sequence, and then performs the next
+     * move in the sequence until the move sequence is finished.
+     *
+     * @param moves List representing the move sequence to carry out.
+     * @param moveNumber the index of the `Move` of the move sequence to perform.
      */
     private void doNextAIMove(final List<Move> moves, final int moveNumber) {
         if (quitGameRequest) {

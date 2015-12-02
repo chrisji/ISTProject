@@ -58,7 +58,7 @@ public class BoardView extends JPanel {
      * Updates the grid with squares of the game's current board configuration.
      * Additionally, assigning mouse listeners to the appropriate squares.
      *
-     * @param controller
+     * @param controller game controller
      */
     public void updateGrid(final Controller controller) {
         // Reset grid layout
@@ -147,7 +147,6 @@ public class BoardView extends JPanel {
                 selectedPanel.select();
             } catch (ClassCastException e) {
                 // Component was not a BlackSquarePanel - should not happen!
-                e.printStackTrace();
             }
         }
     }
@@ -177,7 +176,6 @@ public class BoardView extends JPanel {
             squareToSelect.select();
         } catch (ClassCastException e) {
             // Component was not a BlackSquarePanel
-            e.printStackTrace();
         }
     }
 
@@ -194,7 +192,6 @@ public class BoardView extends JPanel {
             squareToSelect.hintSelect();
         } catch (ClassCastException e) {
             // Component was not a BlackSquarePanel
-            e.printStackTrace();
         }
     }
 
