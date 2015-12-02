@@ -3,7 +3,6 @@ package checkers.graphics;
 import checkers.model.Cell;
 import checkers.model.Game;
 import checkers.model.State;
-import checkers.model.Utils;
 import checkers.players.AI;
 
 import javax.swing.*;
@@ -12,7 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * TODO
+ * `BoardView` is a panel that holds the grid of red and black squares.
  *
  * @author 144158
  * @version 02/12/2015
@@ -22,40 +21,28 @@ public class BoardView extends JPanel {
     // Currently selected square
     private BlackSquarePanel selectedPanel;
 
-    // Panel properties
-    private static final int BOARD_WIDTH = 500;
-    private static final int BOARD_HEIGHT = 500;
-
     /**
-     * TODO
+     * Creates a new `BoardView` containing no pieces.
      */
     public BoardView() {
-        this.setSize(BOARD_WIDTH, BOARD_HEIGHT);
-
-        Dimension dimension = new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
-        this.setMaximumSize(dimension);
-        this.setPreferredSize(dimension);
-        this.setMaximumSize(dimension);
-
-        this.setBackground(new Color(47, 33, 16));
         this.setLayout(new GridLayout(Game.ROWS, Game.COLS));
+        this.setBackground(new Color(47, 33, 16));
         this.setBorder(BorderFactory.createLineBorder(new Color(47, 33, 16), 5));
 
         initEmptyBoard();
     }
 
     /**
-     * TODO
+     * Sets the board to be completely empty (i.e. no pieces)
      */
     public void initEmptyBoard() {
         // Reset grid layout
         this.removeAll();
 
+        // Add empty red and black squares in the correct positions
         for (int i = 0; i < Game.ROWS; i++) {
             for (int j = 0; j < Game.COLS; j++) {
-                if (i % 2 == 0 && j % 2 == 0) {
-                    this.add(new RedSquarePanel());
-                } else if (i % 2 != 0 && j % 2 != 0) {
+                if (isRedSquarePosition(i, j)) {
                     this.add(new RedSquarePanel());
                 } else {
                     this.add(new BlackSquarePanel());
@@ -68,22 +55,26 @@ public class BoardView extends JPanel {
     }
 
     /**
-     * TODO
+     * Updates the grid with squares of the game's current board configuration.
+     * Additionally, assigning mouse listeners to the appropriate squares.
+     *
      * @param controller
      */
     public void updateGrid(final Controller controller) {
+        // Reset grid layout
         this.removeAll();
 
+        // Get the underlying game's current board.
         State gameState = controller.getGame().getGameState();
-        Utils.printBoard(gameState.getBoard());
         Cell[][] boardState = gameState.getBoard();
 
+        // Add the squares and pieces to the grid.
         for (int i = 0; i < Game.ROWS; i++) {
             for (int j = 0; j < Game.COLS; j++) {
                 if (isRedSquarePosition(i, j)) {
                     this.add(new RedSquarePanel());
                 } else if (boardState[i][j].isEmpty()) { // Empty black square
-                    JPanel square = new BlackSquarePanel();
+                    BlackSquarePanel square = new BlackSquarePanel();
 
                     final int rowClicked = i;
                     final int colClicked = j;
@@ -93,19 +84,17 @@ public class BoardView extends JPanel {
                         @Override
                         public void mousePressed(MouseEvent e) {
                             super.mouseClicked(e);
-                            doAction();
-                        }
-
-                        public void doAction() {
                             controller.clickedEmptyCell(rowClicked, colClicked);
                         }
                     });
 
                     this.add(square);
                 } else { // Occupied black square
-                    // Get details about checker in that position, and create the square accordingly.
+                    // Get details about checker in that position
                     boolean isBlack = boardState[i][j].getContents().getPlayer() == controller.getBlackPlayer();
                     boolean isCrowned = boardState[i][j].getContents().isCrowned();
+
+                    // Create square from obtained details
                     final BlackSquarePanel square = new BlackSquarePanel(isBlack, isCrowned);
 
                     boolean isAI = boardState[i][j].getContents().getPlayer() instanceof AI;
@@ -119,10 +108,7 @@ public class BoardView extends JPanel {
                             @Override
                             public void mousePressed(MouseEvent e) {
                                 super.mousePressed(e);
-                                doAction();
-                            }
 
-                            public void doAction() {
                                 boolean valid = controller.clickedOccupiedCell(rowClicked, colClicked);
                                 if (valid) {
                                     selectPanel(rowClicked, colClicked);
@@ -143,9 +129,10 @@ public class BoardView extends JPanel {
     }
 
     /**
-     * TODO
-     * @param row
-     * @param col
+     * Attempts to 'select' the square at the specified position.
+     *
+     * @param row row index of the square to 'select'.
+     * @param col column index of the square to 'select'.
      */
     private void selectPanel(int row, int col) {
         if (isBlackSquarePosition(row, col)) {
@@ -166,9 +153,10 @@ public class BoardView extends JPanel {
     }
 
     /**
-     * TODO
-     * @param row
-     * @param col
+     * Attempts to 'deselect' the square at the specified position.
+     *
+     * @param row row index of the square to 'deselect'.
+     * @param col column index of the square to 'deselect'.
      */
     private void deselectPanel(int row, int col) {
         if (isBlackSquarePosition(row, col) && selectedPanel != null) {
@@ -177,9 +165,10 @@ public class BoardView extends JPanel {
     }
 
     /**
-     * TODO
-     * @param row
-     * @param col
+     * Attempts to 'highlight' the square at the specified position.
+     *
+     * @param row row index of the square to 'highlight'.
+     * @param col column index of the square to 'highlight'.
      */
     public void highlightSquare(int row, int col) {
         try {
@@ -193,9 +182,10 @@ public class BoardView extends JPanel {
     }
 
     /**
-     * TODO
-     * @param row
-     * @param col
+     * Attempts to set the square at the specified position as a hint square.
+     *
+     * @param row row index of the square to 'hint-select'.
+     * @param col column index of the square to 'hint-select'.
      */
     public void hintSelectSquare(int row, int col) {
         try {

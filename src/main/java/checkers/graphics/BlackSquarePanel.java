@@ -8,7 +8,9 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * TODO
+ * Represents a black square on the the GUI's board. It can either be empty, or display an image
+ * representing the piece that is on it.
+ *
  * @author 144158
  * @version 02/12/2015
  */
@@ -80,7 +82,7 @@ public class BlackSquarePanel extends SquarePanel {
     }
 
     /**
-     * TODO
+     * Changes the appearance of the square to show that it is currently a hint.
      */
     public void hintSelect() {
         this.hinted = true;
@@ -89,7 +91,8 @@ public class BlackSquarePanel extends SquarePanel {
     }
 
     /**
-     * TODO
+     * Paints the specified piece image to the background of the square.
+     *
      * @param g
      */
     @Override
