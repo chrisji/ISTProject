@@ -2,7 +2,6 @@ package checkers.players;
 
 import checkers.exceptions.InvalidMoveException;
 import checkers.model.Cell;
-import checkers.model.Move;
 import checkers.model.MoveChain;
 import checkers.model.State;
 
@@ -12,45 +11,69 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * TODO
+ * `AIMiniMax` is an `AI` that generates its next move chain using the minimax algorithm. For this
+ * algorithm no tree pruning is performed (see AIAlphaBeta for minimax with alpha-beta pruning).
  *
  * @author 144158
  * @version 02/12/2015
  */
 public class AIMiniMax extends AI {
 
-    private int depth = 6;
+    // Used to compare the number of static evaluations with other algorithms.
     private static long evalCounter = 0;
-    private int difficulty = AI.DIFFICULTY_MEDIUM;
+
+    private int depth;
+    private int difficulty;
 
     /**
-     * TODO
+     * Creates a new AIMiniMax player with a maximum depth to explore of 6, and
+     * a medium difficulty level.
      *
-     * @param name
+     * @param name Custom name for the player.
      */
     public AIMiniMax(String name) {
-        super(name, true);
+        super(name, true); // `true`, since there are multiple difficulty levels.
+        this.depth = 6;
+        this.difficulty = AI.DIFFICULTY_MEDIUM;
     }
 
     /**
-     * TODO
+     * Creates a new AIMiniMax player with the specified maximum depth to explore, and
+     * a medium difficulty level.
      *
-     * @param name
-     * @param depth
+     * @param name Custom name for the player.
+     * @param depth maximum depth that the algorithm should explore to.
      */
     public AIMiniMax(String name, int depth) {
         super(name, true);
         this.depth = depth;
+        this.difficulty = AI.DIFFICULTY_MEDIUM;
     }
 
     /**
-     * TODO
-     * @param depth
+     * Sets the depth that the algorithm should explore to.
+     *
+     * @param depth the depth that the algorithm should explore to.
      */
     public void setDepth(int depth) {
         this.depth = depth;
     }
 
+    /**
+     * Generates and returns the move chain for this AI's current turn. The
+     * move chain is obatined using the minimax algorithm with no pruning, and
+     * takes into account the difficulty level.
+     *
+     * Difficulties and their actions:
+     *  - Suicidal: always returns the worst scoring move chain.
+     *  - Easy: returns one of the worst 3 scoring move chains at random.
+     *  - Medium: returns one of the best 3 scoring move chains at random.
+     *  - Hard: returns one of the best 2 scoring move chains at random.
+     *  - Insane: always returns the best scoring move chain.
+     *
+     * @return the move chain for this AI's current turn.
+     * @throws InvalidMoveException
+     */
     public MoveChain nextMoveChain() throws InvalidMoveException {
         List<MoveChain> possibleMoveChains = getGame().getMoveChains(getGame().getGameState(), this);
         List<Integer> scores = new ArrayList<Integer>(possibleMoveChains.size());

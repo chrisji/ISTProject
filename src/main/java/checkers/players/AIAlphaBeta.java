@@ -22,11 +22,10 @@ public class AIAlphaBeta extends AI {
     private int difficulty = AI.DIFFICULTY_INSANE;
 
     /**
-     * TODO
-     * @param name
+     * @param name Custom name for the player.
      */
     public AIAlphaBeta(String name) {
-        super(name, true);
+        super(name, true); // `true`, since there are multiple difficulty levels.
     }
 
     /**

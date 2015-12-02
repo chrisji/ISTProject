@@ -1,7 +1,7 @@
 package checkers.exceptions;
 
 /**
- * TODO
+ * Thrown when a move is attempted that is not valid.
  *
  * @author 144158
  * @version 02/12/2015
@@ -9,15 +9,16 @@ package checkers.exceptions;
 public class InvalidMoveException extends Exception {
 
     /**
-     * TODO
+     * Constructor for generic exception message
      */
     public InvalidMoveException() {
         super("Invalid move!");
     }
 
     /**
-     * TODO
-     * @param message
+     * Constructor for custom exception messages.
+     *
+     * @param message exception message string.
      */
     public InvalidMoveException(String message) {
         super(message);
